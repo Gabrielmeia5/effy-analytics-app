@@ -1,0 +1,10 @@
+# Node modules (backend)
+node_modules/
+
+# Editor
+.vscode/
+
+
+
+
+

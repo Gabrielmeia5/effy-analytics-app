@@ -1,0 +1,43 @@
+{
+  "name": "machine-efficiency-app",
+  "version": "1.0.0",
+  "description": "App para monitoramento da eficiência de uma máquina com base na temperatura ambiente",
+  "keywords": [
+    "nodejs",
+    "express",
+    "openweather",
+    "chartjs",
+    "postgres"
+  ],
+  "homepage": "https://github.com/Gabrielmeia5/machine-efficiency-app#readme",
+  "bugs": {
+    "url": "https://github.com/Gabrielmeia5/machine-efficiency-app/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Gabrielmeia5/machine-efficiency-app.git"
+  },
+  "license": "MIT",
+  "author": "Gabriel Lima",
+  "type": "commonjs",
+  "main": "server/app.js",
+  "scripts": {
+    "dev": "ts-node-dev --respawn --transpile-only server/app.ts",
+    "build": "tsc",
+    "start": "node dist/app.js"
+  },
+  "dependencies": {
+    "@prisma/client": "^6.8.2",
+    "dotenv": "^16.5.0",
+    "express": "^5.1.0",
+    "pg": "^8.16.0"
+  },
+  "devDependencies": {
+    "@types/express": "^5.0.2",
+    "@types/node": "^22.15.20",
+    "@types/pg": "^8.15.2",
+    "prisma": "^6.8.2",
+    "ts-node-dev": "^2.0.0",
+    "typescript": "^5.8.3"
+  }
+}
