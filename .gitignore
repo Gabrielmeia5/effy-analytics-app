@@ -5,7 +5,5 @@ node_modules/
 .vscode/
 
 
-# Prisma
-generated/prisma/
 
 

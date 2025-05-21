@@ -6,18 +6,43 @@ export interface WeatherData {
 }
 
 export async function getWeatherFromAPI(city: string): Promise<WeatherData> {
-  const apiKey = process.env.WEATHER_API_KEY!;
-  const response = await axios.get(`https://api.openweathermap.org/data/2.5/weather`, {
-    params: {
-      q: city,
-      appid: apiKey,
-      units: 'metric',
-      lang: 'pt_br' // para retornar "céu limpo" em português
-    },
-  });
+  const apiKey = process.env.WEATHER_API_KEY;
+  if (!apiKey) {
+    throw new Error("API KEY do OpenWeather não configurada.");
+  }
 
-  const temperature = response.data.main.temp;
-  const description = response.data.weather[0].description; // Ex: "céu limpo"
+  try {
+    const response = await axios.get(`https://api.openweathermap.org/data/2.5/weather`, {
+      params: {
+        q: city,
+        appid: apiKey,
+        units: 'metric',
+        lang: 'pt_br'
+      },
+      timeout: 5000 // ⏰ Define um tempo limite para evitar travamento
+    });
 
-  return { temperature, description };
+    const temperature = response.data.main?.temp;
+    const description = response.data.weather?.[0]?.description;
+
+    if (temperature === undefined || !description) {
+      throw new Error('Resposta da API do clima está incompleta.');
+    }
+
+    return { temperature, description };
+
+  } catch (error: any) {
+    if (axios.isAxiosError(error)) {
+      const status = error.response?.status;
+      if (status === 404) {
+        throw new Error(`Cidade "${city}" não encontrada na API de clima.`);
+      }
+      if (status === 401) {
+        throw new Error('API Key inválida ou não autorizada.');
+      }
+      throw new Error(`Erro ao consultar API de clima: ${error.message}`);
+    } else {
+      throw new Error(`Erro inesperado: ${error.message}`);
+    }
+  }
 }
