@@ -1,29 +1,28 @@
+// controllers/metricController.ts
 import { Request, Response } from 'express';
-import prisma from '../db/prisma';
-import { getWeatherFromAPI } from '../services/weatherService';
-import { calculateEfficiency } from '../services/efficiencyService';
+import { collectAndSaveMetric, metricService } from '../services/metricService';
 
 export async function getLatestMetric(req: Request, res: Response) {
   try {
-    const city = process.env.LOCATION_DEFAULT || 'Patos de Minas';
-    const { temperature, description } = await getWeatherFromAPI(city);
-    const efficiency = calculateEfficiency(temperature);
-
-    const metric = await prisma.metric.create({
-      data: {
-        temperature,
-        efficiency,
-        location: city,
-      },
-    });
-
-
-    res.json({
-      ...metric,
-      clima: description 
-    });
+    const metric = await collectAndSaveMetric();
+    res.json(metric);
   } catch (error) {
     console.error('Erro ao buscar temperatura:', error);
     res.status(500).json({ error: 'Erro ao buscar dados de temperatura.' });
+  }
+}
+
+export async function getHistory(req: Request, res: Response) {
+  const range = req.query.range as string;
+
+  if (range !== "day" && range !== "week" && range !== "month") {
+    return res.status(400).json({ error: "Invalid range" });
+  }
+
+  try {
+    const data = await metricService.getHistoryByRange(range);
+    res.json(data);
+  } catch (error) {
+    res.status(500).json({ error: "Server error" });
   }
 }
