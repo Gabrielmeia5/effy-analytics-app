@@ -1,7 +1,16 @@
 import { getWeatherFromAPI } from "./weatherService";
 import { calculateEfficiency } from "./efficiencyService";
 import { pool } from "../db/pgClient";
-import { subDays, startOfDay } from "date-fns";
+import {
+  subDays,
+  subWeeks,
+  subMonths,
+  setHours,
+  setMinutes,
+  setSeconds,
+  startOfDay,
+  setMilliseconds
+} from 'date-fns';
 
 // Função para registrar uma nova métrica
 export async function collectAndSaveMetric() {
@@ -93,3 +102,33 @@ export const metricService = {
     }
 
 };
+
+
+export async function getComparativeMetrics(referenceDate: Date) {
+  const hour = referenceDate.getHours();
+  const minute = referenceDate.getMinutes();
+
+  const dates = {
+    yesterday: subDays(referenceDate, 1),
+    lastWeek: subWeeks(referenceDate, 1),
+    lastMonth: subMonths(referenceDate, 1),
+  };
+
+  const results: Record<string, any> = {};
+
+  for (const [key, date] of Object.entries(dates)) {
+    const start = setMilliseconds(setSeconds(setMinutes(setHours(date, hour), minute), 0), 0);
+    const end = setMilliseconds(setSeconds(setMinutes(setHours(date, hour), minute), 59), 999);
+
+    const query = `
+      SELECT * FROM metric
+      WHERE "createdAt" BETWEEN $1 AND $2
+      ORDER BY "createdAt" DESC
+      LIMIT 1;
+    `;
+    const result = await pool.query(query, [start, end]);
+    results[key] = result.rows[0] || null;
+  }
+
+  return results;
+}

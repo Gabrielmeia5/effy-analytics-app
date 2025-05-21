@@ -1,5 +1,5 @@
 import { Request, Response } from 'express';
-import { collectAndSaveMetric, metricService } from '../services/metricService';
+import { collectAndSaveMetric, getComparativeMetrics, metricService } from '../services/metricService';
 import { pool } from '../db/pgClient';
 
 export async function collectMetric(req: Request, res: Response) {
@@ -89,6 +89,30 @@ export async function getStats(req: Request, res: Response) {
     res.status(500).json({ error: 'Erro interno no servidor' });
   }
 }
+
+export async function getComparative(req: Request, res: Response) {
+  try {
+    const latest = await metricService.getLatest();
+
+    if (!latest) {
+      return res.status(404).json({ error: 'Nenhuma métrica encontrada.' });
+    }
+
+    const referenceDate = new Date(latest.createdAt);
+
+    const comparative = await getComparativeMetrics(referenceDate);
+
+    res.json({
+      reference: latest,
+      comparative,
+    });
+
+  } catch (error) {
+    console.error('Erro no comparativo:', error);
+    res.status(500).json({ error: 'Erro interno no servidor.' });
+  }
+}
+
 
 
 function isValidRange(range: any): range is 'day' | 'week' | 'month' {

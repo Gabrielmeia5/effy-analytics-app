@@ -3,7 +3,8 @@ import {
   collectMetric,
   getLatestMetric,
   getHistory,
-  getStats
+  getStats,
+  getComparative
 } from '../controllers/metricsController';
 
 const router = express.Router();
@@ -21,6 +22,11 @@ router.get('/history', (req, res, next) => {
 
 router.get('/stats', (req, res, next) => {
   getStats(req, res).catch(next);
+});
+
+
+router.get('/comparative', (req, res, next) => {
+  getComparative(req, res).catch(next);
 });
 
 export default router;
