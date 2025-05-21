@@ -19,4 +19,4 @@ setInterval(async () => {
   } catch (error) {
     console.error('Erro ao registrar métrica periódica:', error);
   }
-}, 30 * 1000); // a cada 30 segundos
+}, 30 * 1000);

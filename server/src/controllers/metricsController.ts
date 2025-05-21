@@ -1,20 +1,31 @@
-
 import { Request, Response } from 'express';
 import { collectAndSaveMetric, metricService } from '../services/metricService';
 
-export async function getLatestMetric(req: Request, res: Response) {
+export async function createMetric(req: Request, res: Response) {
   try {
     const metric = await collectAndSaveMetric();
-    res.json(metric);
+    res.status(201).json(metric); // 201 Created
   } catch (error) {
-    console.error('Erro ao buscar temperatura:', error);
-    res.status(500).json({ error: 'Erro ao buscar dados de temperatura.' });
+    console.error('Erro ao registrar nova métrica:', error);
+    res.status(500).json({ error: 'Erro ao registrar nova métrica.' });
+  }
+}
+
+export async function getLatestMetric(req: Request, res: Response) {
+  try {
+    const result = await metricService.getLatest();
+    if (!result) {
+      return res.status(404).json({ error: 'Nenhuma métrica encontrada.' });
+    }
+    res.json(result);
+  } catch (error) {
+    console.error('Erro ao buscar última métrica:', error);
+    res.status(500).json({ error: 'Erro ao buscar última métrica.' });
   }
 }
 
 export async function getHistory(req: Request, res: Response) {
   const range = req.query.range as string;
-
   if (range !== "day" && range !== "week" && range !== "month") {
     return res.status(400).json({ error: "Invalid range" });
   }
@@ -27,10 +38,8 @@ export async function getHistory(req: Request, res: Response) {
   }
 }
 
-
 export async function getStats(req: Request, res: Response) {
   const range = req.query.range as string;
-
   if (range !== 'day' && range !== 'week' && range !== 'month') {
     return res.status(400).json({ error: 'Invalid range' });
   }
