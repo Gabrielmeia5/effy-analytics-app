@@ -1,47 +1,29 @@
 import { Request, Response } from 'express';
-import { collectAndSaveMetric, getComparativeMetrics, metricService } from '../services/metricService';
+import { collectAndSaveMetric, getComparativeMetrics, getPreviousMetric, metricService } from '../services/metricService';
 import { pool } from '../db/pgClient';
 
 export async function collectMetric(req: Request, res: Response) {
   try {
-    // 1️⃣ Salva nova métrica
     const metric = await collectAndSaveMetric();
+    const previous = await getPreviousMetric(metric.id);
+    const trend = calculateTrend(metric.temperature, previous?.temperature);
 
-    // 2️⃣ Busca o penúltimo registro (o mais recente antes desse)
-    const previousResult = await pool.query(
-      `
-      SELECT * FROM metric
-      WHERE id <> $1
-      ORDER BY "createdAt" DESC
-      LIMIT 1;
-      `,
-      [metric.id]
-    );
-
-    const previous = previousResult.rows[0];
-
-    
-    let trend = 'stable';
-
-    if (previous) {
-      if (metric.temperature > previous.temperature) {
-        trend = 'up';
-      } else if (metric.temperature < previous.temperature) {
-        trend = 'down';
-      }
-    }
-
-    // 4️⃣ Retorna métrica + clima + tendência
     res.status(201).json({
-      ...metric, // id, temperature, efficiency, location, createdAt
-      clima: metric.clima, // descrição do clima, já vem do collectAndSaveMetric
-      trend,                
+      ...metric,
+      clima: metric.clima,
+      trend
     });
-
   } catch (error) {
     console.error('Erro ao coletar métrica:', error);
     res.status(500).json({ error: 'Erro ao coletar métrica.' });
   }
+}
+
+function calculateTrend(current: number, previous?: number): 'up' | 'down' | 'stable' {
+  if (previous === undefined) return 'stable';
+  if (current > previous) return 'up';
+  if (current < previous) return 'down';
+  return 'stable';
 }
 
 export async function getLatestMetric(req: Request, res: Response) {

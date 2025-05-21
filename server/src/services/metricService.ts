@@ -7,9 +7,10 @@ import {
   subMonths,
   setHours,
   setMinutes,
-  setSeconds,
+  addMinutes,
+  subMinutes,
   startOfDay,
-  setMilliseconds
+
 } from 'date-fns';
 
 // Função para registrar uma nova métrica
@@ -117,18 +118,35 @@ export async function getComparativeMetrics(referenceDate: Date) {
   const results: Record<string, any> = {};
 
   for (const [key, date] of Object.entries(dates)) {
-    const start = setMilliseconds(setSeconds(setMinutes(setHours(date, hour), minute), 0), 0);
-    const end = setMilliseconds(setSeconds(setMinutes(setHours(date, hour), minute), 59), 999);
+    // Base: mesma hora:minuto do referenceDate, mas no período anterior
+    const base = setMinutes(setHours(date, hour), minute);
+
+    // Arredonda: pega uma janela de ±15 minutos em torno da base
+    const start = subMinutes(base, 15);
+    const end = addMinutes(base, 15);
 
     const query = `
       SELECT * FROM metric
       WHERE "createdAt" BETWEEN $1 AND $2
-      ORDER BY "createdAt" DESC
+      ORDER BY ABS(EXTRACT(EPOCH FROM "createdAt" - $3)) ASC
       LIMIT 1;
     `;
-    const result = await pool.query(query, [start, end]);
+
+    // $3: tempo de referência exato, para ordenar por proximidade
+    const result = await pool.query(query, [start, end, base]);
     results[key] = result.rows[0] || null;
   }
 
   return results;
+}
+
+
+export async function getPreviousMetric(currentId: number) {
+  const result = await pool.query(`
+    SELECT * FROM metric
+    WHERE id <> $1
+    ORDER BY "createdAt" DESC
+    LIMIT 1;
+  `, [currentId]);
+  return result.rows[0];
 }
