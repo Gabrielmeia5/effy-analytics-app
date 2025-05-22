@@ -1,0 +1,32 @@
+@import url(./header.css);
+@import url(./nav.css);
+@import url(./dashboard.css); /* Corrigido 'deshboard.css' para 'dashboard.css' */
+
+:root {
+  --primary-text-color: #1E1E1E;
+  --secondary-text-color: #5E5E5E;
+
+  --primary-bg-color: #F9FAFB;
+  --secondary-bg-color: #FFFFFF;
+
+  --primary-color: #FFE066;
+  --positive-color: #2AC670;
+  --negative-color: #FF6252;
+
+  --card-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+
+  --radius: 12px;
+  --font: 'Inter', sans-serif;
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: var(--font), sans-serif;
+}
+
+body {
+    background-color: var(--primary-bg-color);
+    overflow-x: hidden;
+}

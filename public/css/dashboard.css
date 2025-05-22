@@ -1,0 +1,205 @@
+main {
+    margin: 0 2vw;
+    width: 100vw;
+
+    display: flex;
+    gap: 2vw;
+    position: relative;
+}
+
+
+
+/* Dashboard com 2 linhas: 3 colunas acima, 1 abaixo */
+.container-dashboard {
+    margin-left: 10vw;
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    grid-template-rows: 1fr 1fr;
+    width: 85vw;
+    gap: 1.5rem;
+
+}
+
+
+
+
+
+.container h2 {
+    font-size: 1.2rem;
+    color: var(--text-color);
+    margin-bottom: 0.5em;
+    font-weight: 500;
+}
+
+.container-card-data {
+    height: 100%;
+  display: grid;
+  grid-template-columns: repeat(2, 1fr); /* 2 colunas */
+  grid-template-rows: repeat(2, 1fr);    /* 2 linhas */
+  gap: 1rem;
+
+  background-color: #f4f4f4;
+
+  border-radius: 10px;
+}
+
+
+.card-data {
+    background-color: white;
+    padding: 0.8rem;
+    border-radius: 8px;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+.container-card-media {
+    height: 100%;
+    display: grid;
+    grid-template-rows: repeat(2, 1fr);
+    gap: 0.5rem;
+}
+
+.card-media {
+    background-color: white;
+    padding: 0.8rem;
+    border-radius: 8px;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+.header-card-media {
+    display: flex;
+    justify-content: space-between;
+    margin: 0 1em;
+}
+
+.header-card-media div {
+    display: flex;
+    align-items: center;
+    gap: 0.5em;
+}
+
+.content-card-media {
+    display: flex;
+    color: var(--text-color);
+    gap: 0.5em;
+    align-items: center;
+    margin: 0.5em 0;
+    margin-left: 2em;
+}
+
+.content-card-media p {
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: var(--text-color);
+}
+
+.range-card-media {
+    display: flex;
+    align-items: center;
+    gap: 2em;
+    margin-left: 1.2em;
+    font-size: 0.8rem;
+}
+
+.container {
+    height: 50vh;
+}
+
+.container-card-comparative {
+    height: 100%;
+    display: grid;
+    grid-template-rows: repeat(3, 1fr);
+    gap: 0.5rem;
+}
+
+.card-comparative {
+    background-color: white;
+    padding: 0.8rem 1.2em;
+    border-radius: 8px;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    
+}
+
+.card-comparative h3{
+    font-size: 1rem;
+    color: var(--text-color);
+    margin-left: .5em;
+}
+
+
+.card-comparative-content {
+    display: flex;
+    color: var(--text-color);
+    justify-content: space-between;
+    align-items: center;
+    margin: .2em 12%;
+}
+
+.card-comparative-content div {
+    display: flex;
+    align-items: center;
+    gap: 0.5em;
+}
+
+.container-card-graph {
+    background-color: var(--secondary-bg-color);
+    margin-top: 1em;
+    height: 50vh;
+    width: 100%;
+    grid-column: 1 / -1;
+    height: 400px !important; /* Altura fixa */
+    position: relative;
+}
+
+
+.radio-group {
+            display: flex;
+            background: #f8f9fa;
+            border-radius: 6px;
+            padding: 4px;
+            gap: 2px;
+            border: 1px solid #e9ecef;
+        }
+
+        .radio-option {
+            position: relative;
+        }
+
+        .radio-option input[type="radio"] {
+            opacity: 0;
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            margin: 0;
+            cursor: pointer;
+        }
+
+        .radio-option label {
+            display: block;
+            padding: 6px 12px;
+            font-size: 13px;
+            color: #6c757d;
+            cursor: pointer;
+            border-radius: 4px;
+            transition: all 0.15s ease;
+            user-select: none;
+            font-weight: 500;
+        }
+
+        .radio-option input[type="radio"]:checked + label {
+            background: white;
+            color: #495057;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+        }
+
+        .radio-option:hover label {
+            color: #495057;
+        }

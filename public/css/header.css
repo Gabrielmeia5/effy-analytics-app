@@ -1,0 +1,49 @@
+header {
+    display: flex;
+    justify-content: space-between;
+    padding: 0 2vw;
+    height: 15vh;
+    align-items: center;
+}
+
+.main-title {
+    font-size: 1.8rem;
+    font-weight: 700;
+    color: var(--primary-text-color);
+}
+
+.main-title span {
+    font-weight: 300;
+    color: var(--secondary-text-color);
+}
+
+.header-content {
+    display: flex;
+    gap: 5vw;
+    align-items: center;
+    justify-content: center;
+    font-weight: 300;
+    color: var(--secondary-text-color);
+    margin-right: 8vw;
+}
+
+.header-content div {
+    display: flex;
+    align-items: center;
+    gap: 0.5em;
+    justify-content: center;
+}
+
+.value-localization {
+    font-size: 1rem;
+    font-weight: 300;
+}
+
+.container-timer p {
+    font-size: 0.8rem;
+    font-weight: 300;
+}
+
+.value-timer {
+    font-size: 1rem;
+}

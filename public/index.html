@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Effy Analytics</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,100..900&display=swap" rel="stylesheet">
+
+    <link rel="stylesheet" href="./css/styles.css">
+</head>
+<body>
+    <header>
+        <h1 class="main-title">Effy <span>Analytics</span></h1>
+        <div class="header-content">
+            <div class="container-localization">
+                <span data-lucide="map-pin" class="icon"></span>
+                <h2 class="value-localization">Patos de minas</h2>
+            </div>
+
+            <div class="container-timer">
+                <span data-lucide="alarm-clock" class="icon"></span>
+                <p><span class="value-timer">-</span>s</p>
+            </div>
+            <div class="radio-group">
+                    <div class="radio-option">
+                        <input type="radio" id="day" name="period" value="day" checked>
+                        <label for="day">Day</label>
+                    </div>
+                    <div class="radio-option">
+                        <input type="radio" id="week" name="period" value="week">
+                        <label for="week">Week</label>
+                    </div>
+                    <div class="radio-option">
+                        <input type="radio" id="month" name="period" value="month">
+                        <label for="month">Month</label>
+                    </div>
+                </div>
+        </div>
+    </header>
+
+
+
+    <main>
+        <nav>
+            <ul>
+                <li>
+                    <a aria-label="Dashboard Home" class="nav-button active" href="#">
+                        <span data-lucide="house" class="icon"></span>
+                    </a>
+                </li>
+            </ul>
+        </nav>
+
+        <section class="container-dashboard">
+            <div class="container">
+                <h2>Dados Atuais</h2>
+                <div class="container-card-data">
+                    <div class="card-data">
+                        <div class="header-card-data">
+                            <p>Horário</p>
+                            <span data-lucide="alarm-clock" class="icon"></span>
+                        </div>
+                        <span class="card-data-info value-time">-</span>
+                    </div>
+                    <div class="card-data">
+                        <div class="header-card-data">
+                            <p>Data</p>
+                            <span data-lucide="calendar" class="icon"></span>
+                        </div>
+                        <span class="card-data-info value-date">-</span>
+                    </div>
+                    <div class="card-data">
+                        <div class="header-card-data">
+                            <p>Temperatura</p>
+                            <span data-lucide="thermometer" class="icon"></span>
+                        </div>
+                        <p class="card-data-info"><span class="value-temp">-</span></p>
+ 
+                        <span data-lucide="arrow-right" class="icon trend-icon"></span> <!-- Rotacionar com classes up (apontando na diagonal para cima), down (diagonal para baixo), stable (padrão)-->
+
+                    </div>
+                    <div class="card-data">
+                        <div class="header-card-data">
+                            <p>Eficiência</p>
+                            <span data-lucide="gauge" class="icon"></span>
+                        </div>
+                        <p class="card-data-info"><span class="value-efficiency">-</span></p>
+
+                        <span data-lucide="arrow-right" class="icon value-efficiency-trend"></span> <!-- Rotacionar com classes up (apontando na diagonal para cima), down (diagonal para baixo), stable (padrão)-->
+                    </div>
+                </div>
+            </div>
+            <div class="container">
+                <h2>Resumo</h2>
+                <div class="container-card-media">
+                    <div class="card-media">
+                        <div class="header-card-media">
+                            <span>Média de</span>
+                            <div>
+                                <span data-lucide="wind" class="icon"></span>
+                                <p class="value-clima">-</p>
+                            </div>
+                        </div>
+                        <div class="content-card-media">
+                            <span data-lucide="thermometer" class="icon"></span>                
+                            <p><span class="value-media-temperature">29,05</span>°C</p>
+                        </div>
+                        <div class="range-card-media">
+                            <p>min: <span class="value-min-temperature">22</span>°C</p>
+                            <p>min: <span class="value-max-temperature">32</span>°C</p>
+                        </div>
+                    </div>
+                    <div class="card-media">
+                        <div class="header-card-media">
+                            <span>Média de</span>
+                            <div>
+                                <span data-lucide="square-kanban" class="icon"></span>
+                                <p>Média:<span class="value-defcit">-24</span>%</p>
+                            </div>
+                        </div>
+                        <div class="content-card-media">
+                            <span data-lucide="gauge" class="icon"></span>                
+                            <p><span class="value-media-efficiency">85,05</span>%</p>
+                        </div>
+                        <div class="range-card-media">
+                            <p>min: <span class="value-min-efficiency">52</span>%</p>
+                            <p>min: <span class="value-max-efficiency">100</span>%</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="container">
+                <h2>Comparativo</h2>
+                <div class="container-card-comparative">
+                    <div class="card-comparative">
+                        <h3>Ontem</h3>    
+                        <div class="card-comparative-content">
+                            <div class="temperature-comparative">
+                                <span data-lucide="thermometer" class="icon"></span>
+                                <p><span class="value-yesterday-temperature">29,05</span>°C</p>
+                            </div>
+                            <div class="efficiency-comparative">
+                                <span data-lucide="gauge" class="icon"></span>
+                                <p><span class="value-yesterday-efficiency">85,05</span>%</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card-comparative">
+                        <h3>Last Week</h3>
+                        <div class="card-comparative-content">
+                            <div class="temperature-comparative">
+                                <span data-lucide="thermometer" class="icon"></span>
+                                <p><span class="value-last-week-temperature">29,05</span>°C</p>
+                            </div>
+                            <div class="efficiency-comparative">
+                                <span data-lucide="gauge" class="icon"></span>
+                                <p><span class="value-last-week-efficiency">85,05</span>%</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card-comparative">
+                        <h3>Last Month</h3>
+                        <div class="card-comparative-content">
+                            <div class="temperature-comparative">
+                                <span data-lucide="thermometer" class="icon"></span>
+                                <p><span class="value-last-month-temperature">29,05</span>°C</p>
+                            </div>
+                            <div class="efficiency-comparative">
+                                <span data-lucide="gauge" class="icon"></span>
+                                <p><span class="value-last-month-efficiency">85,05</span>%</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+   
+            </div>
+
+            <div id="chart" class="container-card-graph">
+                
+            </div>
+        </section>
+    </main>
+
+    <script src="./js/scripts.js"></script>
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+        lucide.createIcons();
+        });
+    </script>
+    <script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
+</body>
+</html>
