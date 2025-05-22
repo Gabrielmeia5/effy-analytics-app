@@ -30,3 +30,18 @@ body {
     background-color: var(--primary-bg-color);
     overflow-x: hidden;
 }
+.trend-temp, .trend-eff {
+    transition: transform 0.3s ease;
+}
+
+.trend-up {
+    transform: rotate(-45deg); /* Diagonal para cima */
+}
+
+.trend-down {
+    transform: rotate(45deg); /* Diagonal para baixo */
+}
+
+.trend-stable {
+    transform: rotate(0deg); /* Direita (sem rotação) */
+}

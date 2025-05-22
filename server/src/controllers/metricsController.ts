@@ -6,12 +6,13 @@ export async function collectMetric(req: Request, res: Response) {
   try {
     const metric = await collectAndSaveMetric();
     const previous = await getPreviousMetric(metric.id);
-    const trend = calculateTrend(metric.temperature, previous?.temperature);
-
+    const trendTemp = calculateTrend(metric.temperature, previous?.temperature);
+    const trendEff = calculateTrend(metric.efficiecy, previous?.efficiecy);
     res.status(201).json({
       ...metric,
       clima: metric.clima,
-      trend
+      trendTemp,
+      trendEff,
     });
   } catch (error) {
     console.error('Erro ao coletar métrica:', error);
@@ -99,4 +100,27 @@ export async function getComparative(req: Request, res: Response) {
 
 function isValidRange(range: any): range is 'day' | 'week' | 'month' {
   return ['day', 'week', 'month'].includes(range);
+}
+
+
+
+
+
+
+
+
+
+import { generateMockData } from '../services/mockService';
+
+export async function generateMock(req: Request, res: Response) {
+  const days = parseInt(req.query.days as string) || 7;
+  const interval = parseInt(req.query.interval as string) || 30;
+
+  try {
+    await generateMockData(days, interval);
+    res.status(201).json({ message: `Mock data generated for ${days} days every ${interval} minutes.` });
+  } catch (error) {
+    console.error('Erro ao gerar mock:', error);
+    res.status(500).json({ error: 'Erro ao gerar mock.' });
+  }
 }

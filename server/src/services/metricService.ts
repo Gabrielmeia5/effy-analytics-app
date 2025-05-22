@@ -28,6 +28,7 @@ export async function collectAndSaveMetric() {
 
   const result = await pool.query(insertQuery, values);
   const metric = result.rows[0];
+  
 
   return { ...metric, clima: description };
 }

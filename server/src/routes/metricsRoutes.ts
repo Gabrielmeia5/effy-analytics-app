@@ -4,7 +4,8 @@ import {
   getLatestMetric,
   getHistory,
   getStats,
-  getComparative
+  getComparative,
+  generateMock
 } from '../controllers/metricsController';
 
 const router = express.Router();
@@ -28,5 +29,7 @@ router.get('/stats', (req, res, next) => {
 router.get('/comparative', (req, res, next) => {
   getComparative(req, res).catch(next);
 });
+
+router.get('/mock', generateMock);
 
 export default router;

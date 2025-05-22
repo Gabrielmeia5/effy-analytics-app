@@ -17,7 +17,7 @@
         <div class="header-content">
             <div class="container-localization">
                 <span data-lucide="map-pin" class="icon"></span>
-                <h2 class="value-localization">Patos de minas</h2>
+                <h2 class="value-localization">--</h2>
             </div>
 
             <div class="container-timer">
@@ -78,9 +78,23 @@
                             <span data-lucide="thermometer" class="icon"></span>
                         </div>
                         <p class="card-data-info"><span class="value-temp">-</span></p>
- 
-                        <span data-lucide="arrow-right" class="icon trend-icon"></span> <!-- Rotacionar com classes up (apontando na diagonal para cima), down (diagonal para baixo), stable (padrão)-->
 
+                        <!-- Componente seta simples -->
+                        <svg
+                        class="icon arrow-icon trend-temp"
+                        xmlns="http://www.w3.org/2000/svg"
+                        width="24"
+                        height="24"
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        stroke="currentColor"
+                        stroke-width="2"
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                        >
+                        <line x1="5" y1="12" x2="19" y2="12"></line>
+                        <polyline points="12 5 19 12 12 19"></polyline>
+                        </svg>
                     </div>
                     <div class="card-data">
                         <div class="header-card-data">
@@ -89,7 +103,23 @@
                         </div>
                         <p class="card-data-info"><span class="value-efficiency">-</span></p>
 
-                        <span data-lucide="arrow-right" class="icon value-efficiency-trend"></span> <!-- Rotacionar com classes up (apontando na diagonal para cima), down (diagonal para baixo), stable (padrão)-->
+                        <!-- seta para eficiência -->
+                        <svg
+                        class="icon arrow-icon trend-eff"
+                        xmlns="http://www.w3.org/2000/svg"
+                        width="24"
+                        height="24"
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        stroke="currentColor"
+                        stroke-width="2"
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                        >
+                        <line x1="5" y1="12" x2="19" y2="12"></line>
+                        <polyline points="12 5 19 12 12 19"></polyline>
+                        </svg>
+
                     </div>
                 </div>
             </div>
@@ -106,11 +136,11 @@
                         </div>
                         <div class="content-card-media">
                             <span data-lucide="thermometer" class="icon"></span>                
-                            <p><span class="value-media-temperature">29,05</span>°C</p>
+                            <p><span class="value-temp-avg">--</span></p>
                         </div>
                         <div class="range-card-media">
-                            <p>min: <span class="value-min-temperature">22</span>°C</p>
-                            <p>min: <span class="value-max-temperature">32</span>°C</p>
+                            <p>Mínima: <span class="value-temp-min">--</span></p>
+                            <p>Máxima: <span class="value-temp-max">--</span></p>
                         </div>
                     </div>
                     <div class="card-media">
@@ -118,16 +148,16 @@
                             <span>Média de</span>
                             <div>
                                 <span data-lucide="square-kanban" class="icon"></span>
-                                <p>Média:<span class="value-defcit">-24</span>%</p>
+                                <p>Perda:<span class="value-eff-status">--</span></p>
                             </div>
                         </div>
                         <div class="content-card-media">
                             <span data-lucide="gauge" class="icon"></span>                
-                            <p><span class="value-media-efficiency">85,05</span>%</p>
+                            <p><span class="value-eff-avg">--</span></p>
                         </div>
                         <div class="range-card-media">
-                            <p>min: <span class="value-min-efficiency">52</span>%</p>
-                            <p>min: <span class="value-max-efficiency">100</span>%</p>
+                            <p>Mínima: <span class="value-eff-min">--</span></p>
+                            <p>Máxima: <span class="value-eff-max">--</span></p>
                         </div>
                     </div>
                 </div>
@@ -140,11 +170,11 @@
                         <div class="card-comparative-content">
                             <div class="temperature-comparative">
                                 <span data-lucide="thermometer" class="icon"></span>
-                                <p><span class="value-yesterday-temperature">29,05</span>°C</p>
+                                <p><span class="value-yesterday-temperature">--</span></p>
                             </div>
                             <div class="efficiency-comparative">
                                 <span data-lucide="gauge" class="icon"></span>
-                                <p><span class="value-yesterday-efficiency">85,05</span>%</p>
+                                <p><span class="value-yesterday-efficiency">--</span></p>
                             </div>
                         </div>
                     </div>
@@ -153,11 +183,11 @@
                         <div class="card-comparative-content">
                             <div class="temperature-comparative">
                                 <span data-lucide="thermometer" class="icon"></span>
-                                <p><span class="value-last-week-temperature">29,05</span>°C</p>
+                                <p><span class="value-last-week-temperature">--</span></p>
                             </div>
                             <div class="efficiency-comparative">
                                 <span data-lucide="gauge" class="icon"></span>
-                                <p><span class="value-last-week-efficiency">85,05</span>%</p>
+                                <p><span class="value-last-week-efficiency">--</span></p>
                             </div>
                         </div>
                     </div>
@@ -166,11 +196,11 @@
                         <div class="card-comparative-content">
                             <div class="temperature-comparative">
                                 <span data-lucide="thermometer" class="icon"></span>
-                                <p><span class="value-last-month-temperature">29,05</span>°C</p>
+                                <p><span class="value-last-month-temperature">--</span></p>
                             </div>
                             <div class="efficiency-comparative">
                                 <span data-lucide="gauge" class="icon"></span>
-                                <p><span class="value-last-month-efficiency">85,05</span>%</p>
+                                <p><span class="value-last-month-efficiency">--</span></p>
                             </div>
                         </div>
                     </div>
