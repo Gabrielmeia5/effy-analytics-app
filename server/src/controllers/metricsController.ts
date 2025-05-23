@@ -7,7 +7,7 @@ export async function collectMetric(req: Request, res: Response) {
     const metric = await collectAndSaveMetric();
     const previous = await getPreviousMetric(metric.id);
     const trendTemp = calculateTrend(metric.temperature, previous?.temperature);
-    const trendEff = calculateTrend(metric.efficiecy, previous?.efficiecy);
+    const trendEff = calculateTrend(metric.efficiency, previous?.efficiency);
     res.status(201).json({
       ...metric,
       clima: metric.clima,
@@ -21,6 +21,8 @@ export async function collectMetric(req: Request, res: Response) {
 }
 
 function calculateTrend(current: number, previous?: number): 'up' | 'down' | 'stable' {
+
+
   if (previous === undefined) return 'stable';
   if (current > previous) return 'up';
   if (current < previous) return 'down';

@@ -116,39 +116,37 @@ async function fetchFallbackLatest() {
   }
 }
 
+function processData(data) {
+  const dateObj = new Date(data.createdAt);
+  const { date, time } = formatDateTime(dateObj);
 
+  dateEl.textContent = date;
+  timeEl.textContent = time;
+  tempEl.textContent = formatDisplayValue(data.temperature, 'temp');
+  effEl.textContent = formatDisplayValue(data.efficiency, 'eff'); 
+  locationEl.textContent = data.location;
+  climaEl.textContent = capitalizeWords(data.clima || '--');
+
+  trendTempIcon.classList.remove('trend-up', 'trend-down', 'trend-stable');
+  trendEffIcon.classList.remove('trend-up', 'trend-down', 'trend-stable');
+  trendTempIcon.classList.add(`trend-${data.trendTemp}`);
+  trendEffIcon.classList.add(`trend-${data.trendEff}`);
+
+  updateChart();
+  fetchStats();
+  fetchComparative();
+}
 
 async function fetchData() {
   try {
-    const res = await fetch("/api/metrics/collect", { timeout: 5000 });
+    const res = await fetch("/api/metrics/collect", { timeout: 7000 }); // Timeout manual (não funciona nativo no fetch, pode usar AbortController se quiser melhorar)
     if (!res.ok) throw new Error('API /collect falhou');
     const data = await res.json();
-
-    const dateObj = new Date(data.createdAt);
-    const { date, time } = formatDateTime(dateObj);
-
-    dateEl.textContent = date;
-    timeEl.textContent = time;
-    tempEl.textContent = formatDisplayValue(data.temperature, 'temp');
-    effEl.textContent = formatDisplayValue(data.efficiency, 'eff'); 
-    locationEl.textContent = data.location;
-    climaEl.textContent = capitalizeWords(data.clima);
-
-        trendTempIcon.classList.remove('trend-up', 'trend-down', 'trend-stable');
-        trendEffIcon.classList.remove('trend-up', 'trend-down', 'trend-stable');
-
-        // Adiciona nova classe conforme tendência
-        trendTempIcon.classList.add(`trend-${data.trendTemp}`);
-        trendEffIcon.classList.add(`trend-${data.trendEff}`);
-
-
-    updateChart();
-    fetchStats();
-    fetchComparative();
+    processData(data);
   } catch (error) {
-      console.warn("Erro na API /collect, tentando fallback em /latest", error);
-      showToast("Erro na atualização automática. Dados offline carregados.");
-      await fetchFallbackLatest();
+    console.warn("Erro na API /collect, tentando fallback em /latest", error);
+    showToast("Erro na atualização automática. Dados offline carregados.");
+    await fetchFallbackLatest();
   }
 }
 
@@ -178,7 +176,13 @@ function formatValue(value, reference, type) {
     return '--';
   }
 
-  return formatDisplayValue(reference - value, type);
+
+  if(value > 0) {
+    return `+ ${formatDisplayValue(reference - value, type)}`
+  } else {
+    return formatDisplayValue(reference - value, type)
+  }
+
 }
 
 

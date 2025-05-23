@@ -180,7 +180,7 @@ nav {
   display: flex;
   flex-direction: column;
   width: 100px;
-  height: calc(100vh - 20vh + 5px);
+  height: calc(100vh - 20vh);
   border-radius: var(--radius-lg);
   padding: var(--spacing-xl) 0;
   margin: var(--spacing-lg) 0;
@@ -284,7 +284,8 @@ main {
   display: flex;
   min-height: 85vh;
   gap: var(--spacing-xl);
-  padding: 15vh var(--spacing-xl) var(--spacing-xl); /* ← ajuste aqui */
+  padding: 15vh var(--spacing-xl) var(--spacing-xl); 
+  padding-bottom: 0;
 }
 
 .container-dashboard {
@@ -295,6 +296,7 @@ main {
   gap: var(--spacing-lg);
   width: calc(100% - 120px);
   padding: var(--spacing-lg) 0;
+    padding-bottom: 0;
 }
 
 /* ===== CONTAINERS ===== */
@@ -361,7 +363,7 @@ main {
 
 .card-data:hover .arrow-icon {
   opacity: 1;
-  transform: scale(1.15);
+  scale: 1.1;
 }
 
 .card-data:hover .header-card-data .icon {
@@ -666,7 +668,7 @@ main {
 @media (max-width: 768px) {
   main {
     flex-direction: column;
-    padding: 22vh var(--spacing-xl) var(--spacing-xl); /* ← ajuste aqui */
+    padding: 22vh var(--spacing-md)
 
   }
   
@@ -801,3 +803,5 @@ main {
 .toast.hidden {
   opacity: 0;
 }
+
+
