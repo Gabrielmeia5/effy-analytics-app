@@ -2,6 +2,7 @@ const REFRESH_INTERVAL = 30;
 let timer = REFRESH_INTERVAL;
 let currentPeriod = "day";
 let chart;
+let lastTimestamp = null;
 
 const timerEl = document.querySelector(".value-timer");
 const locationEl = document.querySelector(".value-localization");
@@ -83,10 +84,44 @@ const effData = data.map(item => ({
   }
 }
 
+function showToast(message, duration = 7000) {
+  const toast = document.getElementById('toast');
+  toast.textContent = message;
+  toast.classList.remove('hidden');
+  toast.classList.add('show');
+
+  setTimeout(() => {
+    toast.classList.remove('show');
+    toast.classList.add('hidden');
+  }, duration);
+}
+
+
+async function fetchFallbackLatest() {
+  try {
+    const res = await fetch("/api/metrics/latest");
+    if (!res.ok) throw new Error('API /latest falhou');
+    const data = await res.json();
+
+    processData({
+      ...data,
+      clima: '--',
+      trendTemp: 'stable',
+      trendEff: 'stable'
+    });
+
+  } catch (error) {
+    console.error("Erro ao buscar dados offline (/latest):", error);
+    showToast("Erro geral. Não foi possível carregar nenhum dado.");
+  }
+}
+
+
 
 async function fetchData() {
   try {
-    const res = await fetch("/api/metrics/collect");
+    const res = await fetch("/api/metrics/collect", { timeout: 5000 });
+    if (!res.ok) throw new Error('API /collect falhou');
     const data = await res.json();
 
     const dateObj = new Date(data.createdAt);
@@ -111,7 +146,9 @@ async function fetchData() {
     fetchStats();
     fetchComparative();
   } catch (error) {
-    console.error("Erro ao coletar dados:", error);
+      console.warn("Erro na API /collect, tentando fallback em /latest", error);
+      showToast("Erro na atualização automática. Dados offline carregados.");
+      await fetchFallbackLatest();
   }
 }
 
