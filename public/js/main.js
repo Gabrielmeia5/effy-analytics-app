@@ -17,6 +17,28 @@ const chartEl = document.querySelector("#chart");
 const trendTempIcon = document.querySelector('.trend-temp');
 const trendEffIcon = document.querySelector('.trend-eff');
 
+function formatDisplayValue(value, type = null) {
+  if (value === null || value === undefined || value === '') return '--';
+
+  const num = Number(value);
+  if (isNaN(num)) return '--';
+
+  let formatted = Number.isInteger(num) ? `${num}` : `${num.toFixed(2)}`;
+  formatted = formatted.replace('.', ',');
+
+  if (type === 'temp') return `${formatted}°C`;
+  if (type === 'eff') return `${formatted}%`;
+  return formatted;
+}
+
+function capitalizeWords(str) {
+  if (!str) return '--';
+  return str
+    .split(' ')
+    .map(word => word.charAt(0).toUpperCase() + word.slice(1).toLowerCase())
+    .join(' ');
+}
+
 function formatDateTime(date) {
   return {
     date: date.toLocaleDateString("pt-BR"),
@@ -72,10 +94,10 @@ async function fetchData() {
 
     dateEl.textContent = date;
     timeEl.textContent = time;
-    tempEl.textContent = `${data.temperature.toFixed(2)}°C`;
-    effEl.textContent = `${data.efficiency.toFixed(2)}%`;
+    tempEl.textContent = formatDisplayValue(data.temperature, 'temp');
+    effEl.textContent = formatDisplayValue(data.efficiency, 'eff'); 
     locationEl.textContent = data.location;
-    climaEl.textContent = data.clima;
+    climaEl.textContent = capitalizeWords(data.clima);
 
         trendTempIcon.classList.remove('trend-up', 'trend-down', 'trend-stable');
         trendEffIcon.classList.remove('trend-up', 'trend-down', 'trend-stable');
@@ -99,24 +121,29 @@ async function fetchStats() {
     const response = await fetch(`/api/metrics/stats?range=${currentPeriod}`);
     const data = await response.json();
 
-    document.querySelector(".value-temp-avg").textContent = `${data.temperature.avg.toFixed(2)}°C`;
-    document.querySelector(".value-temp-min").textContent = `${data.temperature.min.toFixed(2)}°C`;
-    document.querySelector(".value-temp-max").textContent = `${data.temperature.max.toFixed(2)}°C`;
+    document.querySelector(".value-temp-avg").textContent = formatDisplayValue(data.temperature.avg, 'temp');
+    document.querySelector(".value-temp-min").textContent = formatDisplayValue(data.temperature.min, 'temp');
+    document.querySelector(".value-temp-max").textContent = formatDisplayValue(data.temperature.max, 'temp');
 
-    document.querySelector(".value-eff-avg").textContent = `${data.efficiency.avg.toFixed(2)}%`;
-    document.querySelector(".value-eff-min").textContent = `${data.efficiency.min.toFixed(2)}%`;
-    document.querySelector(".value-eff-max").textContent = `${data.efficiency.max.toFixed(2)}%`;
+    document.querySelector(".value-eff-avg").textContent = formatDisplayValue(data.efficiency.avg, 'eff');
+    document.querySelector(".value-eff-min").textContent = formatDisplayValue(data.efficiency.min, 'eff');
+    document.querySelector(".value-eff-max").textContent = formatDisplayValue(data.efficiency.max, 'eff');
 
-    document.querySelector(".value-eff-status").textContent = `${(100 - data.efficiency.avg).toFixed(2)}%`;
+    document.querySelector(".value-eff-status").textContent = formatDisplayValue(100 - data.efficiency.avg, 'eff');
   } catch (error) {
     console.error('Erro ao atualizar estatísticas:', error);
   }
 }
 
 
-function formatValue(value, reference) {
-  return (value === null || value === undefined) ? '--' : (reference-value).toFixed(2);
+function formatValue(value, reference, type) {
+  if (value === null || value === undefined || reference === null || reference === undefined) {
+    return '--';
+  }
+
+  return formatDisplayValue(reference - value, type);
 }
+
 
 
 
@@ -126,18 +153,28 @@ async function fetchComparative() {
     if (!res.ok) throw new Error('Erro ao buscar dados comparativos');
 
     const data = await res.json();
+
+    const yesterdayTemp = document.querySelector('.value-yesterday-temperature');
+
+
     
-     // Ontem
-    document.querySelector('.value-yesterday-temperature').textContent = formatValue(data.comparative.yesterday?.temperature, data.reference.temperature);
-    document.querySelector('.value-yesterday-efficiency').textContent = formatValue(data.comparative.yesterday?.efficiency, data.reference.efficiency);
+    const yesterdayEff = document.querySelector('.value-yesterday-efficiency');
+    const lastWeekTemp = document.querySelector('.value-last-week-temperature');
+    const lastWeekEff = document.querySelector('.value-last-week-efficiency');
+    const lastMonthTemp = document.querySelector('.value-last-month-temperature');
+    const lastMonthEff = document.querySelector('.value-last-month-efficiency');
+    
+    // Ontem
+    yesterdayTemp.textContent = formatValue(data.comparative.yesterday?.temperature, data.reference.temperature, 'temp');
+    yesterdayEff.textContent = formatValue(data.comparative.yesterday?.efficiency, data.reference.efficiency, 'eff');
 
     // Semana passada
-    document.querySelector('.value-last-week-temperature').textContent = formatValue(data.comparative.lastWeek?.temperature, data.reference.temperature);
-    document.querySelector('.value-last-week-efficiency').textContent = formatValue(data.comparative.lastWeek?.efficiency, data.reference.efficiency);
+    lastWeekTemp.textContent = formatValue(data.comparative.lastWeek?.temperature, data.reference.temperature, 'temp');
+    lastWeekEff.textContent = formatValue(data.comparative.lastWeek?.efficiency, data.reference.efficiency, 'eff');
 
     // Mês passado
-    document.querySelector('.value-last-month-temperature').textContent = formatValue(data.comparative.lastMonth?.temperature, data.reference.temperature);
-    document.querySelector('.value-last-month-efficiency').textContent = formatValue(data.comparative.lastMonth?.efficiency, data.reference.efficiency);
+    lastMonthTemp.textContent = formatValue(data.comparative.lastMonth?.temperature, data.reference.temperature, 'temp');
+    lastMonthEff.textContent = formatValue(data.comparative.lastMonth?.efficiency, data.reference.efficiency, 'eff');
     
   } catch (error) {
     console.error('Erro ao carregar dados comparativos:', error);

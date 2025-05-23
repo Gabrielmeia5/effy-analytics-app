@@ -722,3 +722,12 @@ main {
 
 
 
+/* ===== Utils ===== */
+
+.negative-value {
+  color: var(--negative-color);
+}
+
+.positive-value {
+  color: var(--positive-color);
+}
