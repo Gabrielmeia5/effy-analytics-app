@@ -152,6 +152,16 @@ function initChart() {
       height: 500,
       toolbar: { show: false }
     },
+    grid: {
+      borderColor: '#E5E7EB',
+      row: {
+        colors: ['#F9FAFB', 'transparent'], // linhas alternadas bem suaves
+        opacity: 0.5
+      }
+    },
+    dataLabels: {
+      enabled: false
+    },
     stroke: {
       curve: 'smooth',
       width: 2
