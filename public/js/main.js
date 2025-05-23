@@ -80,7 +80,6 @@ async function fetchData() {
         trendTempIcon.classList.remove('trend-up', 'trend-down', 'trend-stable');
         trendEffIcon.classList.remove('trend-up', 'trend-down', 'trend-stable');
 
-        console.log(data.trendTemp, data.trendEff);
         // Adiciona nova classe conforme tendência
         trendTempIcon.classList.add(`trend-${data.trendTemp}`);
         trendEffIcon.classList.add(`trend-${data.trendEff}`);
@@ -184,14 +183,14 @@ function initChart() {
       {
         title: { text: 'Temperatura (°C)' },
         labels: {
-          formatter: val => `${val}°C`
+          formatter: val => Number.isInteger(val) ? `${val}°C` : `${val.toFixed(2)}°C`
         }
       },
       {
         opposite: true,
         title: { text: 'Eficiência (%)' },
         labels: {
-          formatter: val => `${val}%`
+          formatter: val => Number.isInteger(val) ? `${val}%` : `${val.toFixed(2)}%`
         },
         min: 75,
         max: 100
@@ -222,8 +221,16 @@ radioButtons.forEach((radio) => {
   });
 });
 
-window.addEventListener("DOMContentLoaded", () => {
-  initChart();
-  fetchData();
+window.addEventListener("DOMContentLoaded", async () => {
+  await loadAllData();
   startTimer();
+
+  const loader = document.getElementById('loader');
+  loader.classList.add('fade-out');
+  setTimeout(() => loader.remove(), 500);
 });
+
+async function loadAllData() {
+  initChart();             // Inicializa gráfico vazio
+  await fetchData();       // Aguarda dados, updateChart(), stats, comparativo
+}
