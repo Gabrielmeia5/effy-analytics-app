@@ -1,36 +1,32 @@
-import { Request, Response } from 'express';
-import { metricService } from '../services/metricService';
-import { getComparativeMetrics } from '../services/metricService';
-import puppeteer from 'puppeteer';
-import Handlebars from 'handlebars';
+import { Request, Response } from "express";
+import { metricService } from "../services/metricService";
+import { getComparativeMetrics } from "../services/metricService";
+import puppeteer from "puppeteer";
+import Handlebars from "handlebars";
 
 function formatDate(dateStr: string) {
   const date = new Date(dateStr);
-  return date.toLocaleDateString('pt-BR');
+  return date.toLocaleDateString("pt-BR");
 }
 
 function formatTime(dateStr: string) {
   const date = new Date(dateStr);
-  return date.toLocaleTimeString('pt-BR');
+  return date.toLocaleTimeString("pt-BR");
 }
 
 function formatNumber(num: number) {
-  return num.toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+  return num.toLocaleString("pt-BR", { minimumFractionDigits: 2, maximumFractionDigits: 2 });
 }
 
 export async function exportPDF(req: Request, res: Response) {
   try {
     const { chartImage } = req.body; // base64 do gráfico (data:image/png;base64,...)
-    const range = req.query.range as 'day' | 'week' | 'month' || 'week';
+    const range = (req.query.range as "day" | "week" | "month") || "week";
 
-    const [history, stats, latest] = await Promise.all([
-      metricService.getHistoryByRange(range),
-      metricService.getStatsByRange(range),
-      metricService.getLatest()
-    ]);
+    const [history, stats, latest] = await Promise.all([metricService.getHistoryByRange(range), metricService.getStatsByRange(range), metricService.getLatest()]);
 
     const today = new Date();
-    const local = latest?.location || 'Local não definido';
+    const local = latest?.location || "Local não definido";
 
     const compiledHTML = compileHTMLTemplate({
       hoje: formatDate(today.toISOString()),
@@ -51,36 +47,36 @@ export async function exportPDF(req: Request, res: Response) {
           min: formatNumber(stats.efficiency.min),
           avg: formatNumber(stats.efficiency.avg),
           max: formatNumber(stats.efficiency.max),
-        }
+        },
       },
-      history: history.map(h => ({
+      history: history.map((h) => ({
         data: formatDate(h.createdAt),
         hora: formatTime(h.createdAt),
         temperature: formatNumber(h.temperature),
         efficiency: formatNumber(h.efficiency),
-        location: h.location || 'Local não definido'
+        location: h.location || "Local não definido",
       })),
-      chartImage
+      chartImage,
     });
 
     const browser = await puppeteer.launch({ headless: true });
     const page = await browser.newPage();
-    await page.setContent(compiledHTML, { waitUntil: 'networkidle0' });
+    await page.setContent(compiledHTML, { waitUntil: "networkidle0" });
 
     const pdf = await page.pdf({
-      format: 'A4',
+      format: "A4",
       printBackground: true,
-      margin: { top: '20mm', bottom: '20mm', left: '15mm', right: '15mm' }
+      margin: { top: "20mm", bottom: "20mm", left: "15mm", right: "15mm" },
     });
 
     await browser.close();
 
-    res.setHeader('Content-Type', 'application/pdf');
-    res.setHeader('Content-Disposition', 'attachment; filename="relatorio-effy.pdf"');
+    res.setHeader("Content-Type", "application/pdf");
+    res.setHeader("Content-Disposition", 'attachment; filename="relatorio-effy.pdf"');
     res.send(pdf);
   } catch (error) {
-    console.error('Erro ao exportar PDF:', error);
-    res.status(500).json({ error: 'Erro ao gerar PDF' });
+    console.error("Erro ao exportar PDF:", error);
+    res.status(500).json({ error: "Erro ao gerar PDF" });
   }
 }
 
@@ -150,7 +146,6 @@ function compileHTMLTemplate(data: any): string {
       <p>Eficiência: <strong>{{ultima.efficiency}}%</strong></p>
       <p>Data/Hora: <strong>{{ultima.data}} às {{ultima.hora}}</strong></p>
     </div>
-    <p>Vasco</p>
     <div class="section">
       <h2>Resumo Estatístico</h2>
       <table>

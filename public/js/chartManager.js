@@ -1,67 +1,66 @@
-
 let chartInstance = null;
 
 export function initChart(containerElement) {
   const options = {
     chart: {
-      type: 'line',
+      type: "line",
       height: 500,
-      toolbar: { show: false }
+      toolbar: { show: false },
     },
     grid: {
-      borderColor: '#E5E7EB',
+      borderColor: "#E5E7EB",
       row: {
-        colors: ['#F9FAFB', 'transparent'],
-        opacity: 0.5
-      }
+        colors: ["#F9FAFB", "transparent"],
+        opacity: 0.5,
+      },
     },
     dataLabels: {
-      enabled: false
+      enabled: false,
     },
     stroke: {
-      curve: 'smooth',
-      width: 2
+      curve: "smooth",
+      width: 2,
     },
     series: [
-      { name: 'Temperatura (°C)', data: [] },
-      { name: 'Eficiência (%)', data: [] }
+      { name: "Temperatura (°C)", data: [] },
+      { name: "Eficiência (%)", data: [] },
     ],
     xaxis: {
-      type: 'datetime',
+      type: "datetime",
       labels: {
         datetimeFormatter: {
-          hour: 'HH:mm',
-          minute: 'HH:mm',
+          hour: "HH:mm",
+          minute: "HH:mm",
         },
-        rotate: -45
-      }
+        rotate: -45,
+      },
     },
     yaxis: [
       {
-        title: { text: 'Temperatura (°C)' },
+        title: { text: "Temperatura (°C)" },
         labels: {
-          formatter: val => Number.isInteger(val) ? `${val}°C` : `${val.toFixed(2)}°C`
-        }
+          formatter: (val) => (Number.isInteger(val) ? `${val}°C` : `${val.toFixed(2)}°C`),
+        },
       },
       {
         opposite: true,
-        title: { text: 'Eficiência (%)' },
+        title: { text: "Eficiência (%)" },
         labels: {
-          formatter: val => Number.isInteger(val) ? `${val}%` : `${val.toFixed(2)}%`
+          formatter: (val) => (Number.isInteger(val) ? `${val}%` : `${val.toFixed(2)}%`),
         },
         min: 75,
-        max: 100
-      }
+        max: 100,
+      },
     ],
     tooltip: {
       x: {
-        format: 'dd/MM/yyyy HH:mm:ss'
-      }
+        format: "dd/MM/yyyy HH:mm:ss",
+      },
     },
-    colors: ['#FF4560', '#00E396'],
+    colors: ["#FF4560", "#00E396"],
     legend: {
-      position: 'top'
-    }
+      position: "top",
+    },
   };
 
   chartInstance = new ApexCharts(containerElement, options);
@@ -72,8 +71,8 @@ export function updateChart(tempData, effData) {
   if (!chartInstance) return;
 
   chartInstance.updateSeries([
-    { name: 'Temperatura (°C)', data: tempData },
-    { name: 'Eficiência (%)', data: effData }
+    { name: "Temperatura (°C)", data: tempData },
+    { name: "Eficiência (%)", data: effData },
   ]);
 }
 

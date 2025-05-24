@@ -1,29 +1,29 @@
 /* ===== VARIÁVEIS CSS ===== */
 :root {
   /* Cores de Texto */
-  --primary-text-color: #1F2937;        /* Texto principal mais suave */
-  --secondary-text-color: #6B7280;      /* Texto secundário equilibrado */
-  --text-color: #1F2937;
-  --muted-text: #9CA3AF;
-  --accent-text: #374151;    
+  --primary-text-color: #1f2937; 
+  --secondary-text-color: #6b7280; 
+  --text-color: #1f2937;
+  --muted-text: #9ca3af;
+  --accent-text: #374151;
 
   /* Cores de Fundo */
-  --primary-bg-color: #F8FAFC;          /* Fundo mais suave e acolhedor */
-  --secondary-bg-color: #FFFFFF;
-  --card-bg-color: #FFFFFF;
-  --hover-bg-color: #F1F5F9;     
+  --primary-bg-color: #f8fafc; 
+  --secondary-bg-color: #ffffff;
+  --card-bg-color: #ffffff;
+  --hover-bg-color: #f1f5f9;
 
   /* Cores de Status */
-  --primary-color: #FFE066;
-  --positive-color: #10B981; 
-  --negative-color: #EF4444;
-  --warning-color: #F59E0B;
-  --neutral-color: #6B7280;
+  --primary-color: #ffe066;
+  --positive-color: #10b981;
+  --negative-color: #ef4444;
+  --warning-color: #f59e0b;
+  --neutral-color: #6b7280;
 
   /* Cores do Gráfico */
-  --chart-primary: #3B82F6;
-  --chart-secondary: #10B981;
-  --chart-grid: #E5E7EB;
+  --chart-primary: #3b82f6;
+  --chart-secondary: #10b981;
+  --chart-grid: #e5e7eb;
 
   /* Sombras */
   --card-shadow: 0 1px 3px rgba(0, 0, 0, 0.06), 0 1px 2px rgba(0, 0, 0, 0.04);
@@ -45,8 +45,8 @@
   --spacing-xl: 2rem;
 
   /* Fonte */
-  --font: 'Inter', sans-serif;
-  
+  --font: "Inter", sans-serif;
+
   /* Transições */
   --transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
   --transition-slow: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
@@ -60,7 +60,6 @@
   box-sizing: border-box;
   font-family: var(--font);
   cursor: default;
-
 }
 
 body {
@@ -79,15 +78,13 @@ header {
   height: 15vh;
   min-height: 80px;
   background-color: var(--secondary-bg-color);
-  border-bottom: 1px solid #E5E7EB;
-
+  border-bottom: 1px solid #e5e7eb;
 
   position: fixed;
   top: 0;
   left: 0;
   right: 0;
   z-index: 100;
-
 }
 .title-container {
   display: flex;
@@ -145,11 +142,11 @@ header {
 /* Radio Group */
 .radio-group {
   display: flex;
-  background: #F8F9FA;
+  background: #f8f9fa;
   border-radius: var(--radius);
   padding: 4px;
   gap: 2px;
-  border: 1px solid #E9ECEF;
+  border: 1px solid #e9ecef;
 }
 
 .radio-option {
@@ -194,7 +191,7 @@ nav {
   display: flex;
   flex-direction: column;
   width: 100px;
-  
+
   border-radius: var(--radius-lg);
   padding: var(--spacing-xl) 0;
   margin: var(--spacing-lg) 0;
@@ -204,7 +201,6 @@ nav {
   align-items: center;
   box-shadow: var(--card-shadow);
   z-index: 10;
-
 }
 
 nav ul {
@@ -246,16 +242,14 @@ nav ul li * {
   color: var(--secondary-text-color);
   text-decoration: none;
   transition: background-color 0.3s ease, color 0.3s ease, transform 0.3s ease;
-  transform: scale(1); /* estado base */
+  transform: scale(1); 
 }
 
 .nav-button.active {
   background-color: var(--primary-color);
   color: var(--primary-text-color);
-  transform: scale(1.1); /* efeito sutil de destaque */
+  transform: scale(1.1); 
 }
-
-
 
 /* ===== LOADER ===== */
 #loader {
@@ -300,15 +294,12 @@ nav ul li * {
   pointer-events: none;
 }
 
-
-
-
 /* ===== MAIN LAYOUT ===== */
 main {
   display: flex;
   min-height: 85vh;
   gap: var(--spacing-xl);
-  padding: 15vh var(--spacing-xl) var(--spacing-xl); 
+  padding: 15vh var(--spacing-xl) var(--spacing-xl);
   padding-bottom: 0;
 }
 
@@ -320,7 +311,7 @@ main {
   gap: var(--spacing-lg);
   width: calc(100% - 120px);
   padding: var(--spacing-lg) 0;
-    padding-bottom: 0;
+  padding-bottom: 0;
 }
 
 /* ===== CONTAINERS ===== */
@@ -338,10 +329,8 @@ main {
 .container:hover {
   box-shadow: var(--card-shadow-hover);
   transform: translateY(-2px);
-  border-color: #E2E8F0;
+  border-color: #e2e8f0;
 }
-
-
 
 .container h2 {
   font-size: 1.25rem;
@@ -486,8 +475,6 @@ main {
   gap: var(--spacing-sm);
 }
 
-
-
 .header-card-media div p {
   font-size: 0.875rem;
   color: var(--secondary-text-color);
@@ -511,9 +498,8 @@ main {
   color: var(--chart-secondary);
 }
 
-
 .content-card-media p {
-  font-size: 1.50rem;
+  font-size: 1.5rem;
   font-weight: 700;
   color: var(--primary-text-color);
 }
@@ -574,8 +560,6 @@ main {
   gap: var(--spacing-sm);
 }
 
-
-
 .temperature-comparative .icon {
   color: var(--warning-color);
   width: 18px;
@@ -617,15 +601,14 @@ main {
 
 /* ===== RESPONSIVIDADE ===== */
 
-
 /* === AJUSTES DE RESPONSIVIDADE ENTRE 1024px E 1516px === */
 @media (min-width: 1024px) and (max-width: 1516px) {
   html {
-    font-size: 90%; 
+    font-size: 90%;
   }
 
   .main-title {
-    font-size: clamp(1.25rem, 2vw, 1.75rem); 
+    font-size: clamp(1.25rem, 2vw, 1.75rem);
   }
 
   .container-dashboard {
@@ -637,8 +620,8 @@ main {
   }
 
   .card-data-info {
-    font-size: 1.25rem; 
-    word-break: break-word; 
+    font-size: 1.25rem;
+    word-break: break-word;
     overflow-wrap: break-word;
     max-width: 100%;
   }
@@ -646,7 +629,7 @@ main {
   .container-card-media .content-card-media p,
   .container-card-media .range-card-media p,
   .container-card-media .header-card-media div p {
-    font-size: 0.9rem; /* Ajuste fino para melhor aproveitamento de espaço */
+    font-size: 0.9rem; 
   }
 
   .card-media .content-card-media p {
@@ -658,7 +641,7 @@ main {
   }
 
   .container {
-    padding: var(--spacing-md); /* Margens internas menores para comportar tudo na viewport */
+    padding: var(--spacing-md); 
   }
 
   .container h2 {
@@ -673,15 +656,15 @@ main {
     margin-left: 80px;
     width: calc(100% - 80px);
   }
-  
+
   nav {
     width: 60px;
   }
-  
+
   .header-content {
     gap: 1.5rem;
   }
-  
+
   .radio-option label {
     padding: var(--spacing-xs) var(--spacing-sm);
     font-size: 0.75rem;
@@ -692,32 +675,29 @@ main {
 @media (max-width: 768px) {
   main {
     flex-direction: column;
-    padding: 22vh var(--spacing-md)
-
+    padding: 22vh var(--spacing-md);
   }
-  
 
-  
   nav ul {
     flex-direction: row;
   }
-  
+
   .container-dashboard {
     margin-left: 0;
     width: 100%;
     grid-template-columns: 1fr;
     gap: var(--spacing-md);
   }
-  
+
   .container {
     min-height: auto;
   }
-  
+
   .header-content {
     flex-wrap: wrap;
     gap: var(--spacing-md);
   }
-  
+
   .radio-group {
     order: 3;
     width: 100%;
@@ -738,7 +718,7 @@ main {
     flex-direction: row;
     justify-content: center;
     padding: var(--spacing-sm);
-    box-shadow: 0 -2px 5px rgba(0,0,0,0.05);
+    box-shadow: 0 -2px 5px rgba(0, 0, 0, 0.05);
     background-color: var(--secondary-bg-color);
     z-index: 100;
   }
@@ -761,38 +741,35 @@ main {
     padding: var(--spacing-md);
     gap: var(--spacing-md);
   }
-  
+
   .header-content {
     width: 100%;
     justify-content: space-around;
   }
-  
+
   .container-card-data {
     grid-template-columns: 1fr;
     grid-template-rows: repeat(4, 1fr);
   }
-  
+
   .card-comparative-content {
     flex-direction: column;
     gap: var(--spacing-md);
   }
-  
+
   .range-card-media {
     flex-direction: column;
     gap: var(--spacing-xs);
   }
-  
+
   .content-card-media p {
     font-size: 1.5rem;
   }
-  
+
   .card-data-info {
     font-size: 1.25rem;
   }
 }
-
-
-
 
 /* ===== Utils ===== */
 
@@ -876,9 +853,6 @@ main {
   }
 }
 
-
-
-
 .btn-export {
   padding: 10px 16px;
   background-color: var(--chart-primary);
@@ -892,8 +866,6 @@ main {
 .btn-export:hover {
   background-color: #2563eb;
 }
-
-
 
 /* ...existing code... */
 .btn-edit-location {
@@ -923,7 +895,7 @@ main {
   display: none;
 }
 .input-location {
-  border: 1px solid #E5E7EB;
+  border: 1px solid #e5e7eb;
   border-radius: 6px;
   padding: 4px 8px;
   font-size: 1rem;
@@ -934,7 +906,8 @@ main {
 .input-location:focus {
   border-color: var(--chart-primary);
 }
-.btn-confirm-location, .btn-cancel-location {
+.btn-confirm-location,
+.btn-cancel-location {
   background: none;
   border: none;
   cursor: pointer;
@@ -945,7 +918,8 @@ main {
   display: flex;
   align-items: center;
 }
-.btn-confirm-location:hover, .btn-cancel-location:hover {
+.btn-confirm-location:hover,
+.btn-cancel-location:hover {
   background: var(--hover-bg-color);
   color: var(--primary-text-color);
 }

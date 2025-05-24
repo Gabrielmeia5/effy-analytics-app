@@ -1,49 +1,25 @@
-import {
-  fetchMetrics,
-  fetchLatest,
-  fetchStats,
-  fetchComparative,
-  fetchHistory,
-  fetchExportCSV,
-  fetchExportPDF,
-  fetchLocation,
-  updateLocation
-} from './apiService.js';
+import { fetchMetrics, fetchLatest, fetchStats, fetchComparative, fetchHistory, fetchExportCSV, fetchExportPDF, fetchLocation, updateLocation } from "./apiService.js";
 
-import {
-  formatDisplayValue,
-  showToast
-} from './utils.js';
+import { formatDisplayValue, showToast } from "./utils.js";
 
-import {
-  initChart,
-  updateChart,
-  exportChartImage
-} from './chartManager.js';
+import { initChart, updateChart, exportChartImage } from "./chartManager.js";
 
-import {
-  updateMainMetrics,
-  updateStats,
-  updateComparative,
-  updateLocationDisplay
-} from './domUpdater.js';
+import { updateMainMetrics, updateStats, updateComparative, updateLocationDisplay } from "./domUpdater.js";
 
 const REFRESH_INTERVAL = 30;
 let timer = REFRESH_INTERVAL;
 let currentPeriod = "day";
 let currentLocationValue = null;
 
-
 window.addEventListener("DOMContentLoaded", async () => {
   await fetchCurrentLocation();
   await loadAllData();
   startTimer();
 
-  const loader = document.getElementById('loader');
-  loader.classList.add('fade-out');
+  const loader = document.getElementById("loader");
+  loader.classList.add("fade-out");
   setTimeout(() => loader.remove(), 500);
 });
-
 
 function startTimer() {
   clearInterval(window.timerInterval);
@@ -64,15 +40,13 @@ async function loadAllData() {
   await fetchData();
 }
 
-
-
 async function fetchData() {
   try {
     const data = await fetchMetrics();
     processData(data);
   } catch (error) {
     console.warn("Erro na API /collect, tentando fallback em /latest", error);
-    showToast("Erro na atualização automática. Dados offline carregados.", 'warning');
+    showToast("Erro na atualização automática. Dados offline carregados.", "warning");
     await fetchFallbackLatest();
   }
 }
@@ -82,16 +56,15 @@ async function fetchFallbackLatest() {
     const data = await fetchLatest();
     processData({
       ...data,
-      clima: '--',
-      trendTemp: 'stable',
-      trendEff: 'stable'
+      clima: "--",
+      trendTemp: "stable",
+      trendEff: "stable",
     });
   } catch (error) {
     console.error("Erro ao buscar dados offline (/latest):", error);
-    showToast("Erro geral. Não foi possível carregar nenhum dado.", 'error');
+    showToast("Erro geral. Não foi possível carregar nenhum dado.", "error");
   }
 }
-
 
 function processData(data) {
   updateMainMetrics(data);
@@ -100,19 +73,18 @@ function processData(data) {
   fetchComparativeUI();
 }
 
-
 async function updateChartUI() {
   try {
     const data = await fetchHistory(currentPeriod);
 
-    const tempData = data.map(item => ({
+    const tempData = data.map((item) => ({
       x: new Date(item.createdAt).getTime() - new Date().getTimezoneOffset() * 60000,
-      y: item.temperature
+      y: item.temperature,
     }));
 
-    const effData = data.map(item => ({
+    const effData = data.map((item) => ({
       x: new Date(item.createdAt).getTime() - new Date().getTimezoneOffset() * 60000,
-      y: item.efficiency
+      y: item.efficiency,
     }));
 
     updateChart(tempData, effData);
@@ -121,13 +93,12 @@ async function updateChartUI() {
   }
 }
 
-
 async function fetchStatsUI() {
   try {
     const data = await fetchStats(currentPeriod);
     updateStats(data);
   } catch (error) {
-    console.error('Erro ao atualizar estatísticas:', error);
+    console.error("Erro ao atualizar estatísticas:", error);
   }
 }
 
@@ -136,22 +107,20 @@ async function fetchComparativeUI() {
     const data = await fetchComparative();
     updateComparative(data);
   } catch (error) {
-    console.error('Erro ao carregar dados comparativos:', error);
+    console.error("Erro ao carregar dados comparativos:", error);
   }
 }
-
 
 async function fetchCurrentLocation() {
   try {
     const data = await fetchLocation();
     updateLocationDisplay(data.location);
-    currentLocationValue = data.location || '--';
+    currentLocationValue = data.location || "--";
   } catch {
-    updateLocationDisplay('--');
-    currentLocationValue = '--';
+    updateLocationDisplay("--");
+    currentLocationValue = "--";
   }
 }
-
 
 document.querySelectorAll('input[name="period"]').forEach((radio) => {
   radio.addEventListener("change", (e) => {
@@ -161,11 +130,11 @@ document.querySelectorAll('input[name="period"]').forEach((radio) => {
   });
 });
 
-document.getElementById('btn-export-csv').addEventListener('click', async () => {
+document.getElementById("btn-export-csv").addEventListener("click", async () => {
   try {
     const blob = await fetchExportCSV(currentPeriod);
     const url = window.URL.createObjectURL(blob);
-    const a = document.createElement('a');
+    const a = document.createElement("a");
     a.href = url;
     a.download = `metrics-${currentPeriod}.csv`;
     document.body.appendChild(a);
@@ -173,72 +142,69 @@ document.getElementById('btn-export-csv').addEventListener('click', async () => 
     a.remove();
   } catch (err) {
     console.error("Erro ao exportar CSV:", err);
-    showToast("Erro ao exportar CSV.", 'error');
+    showToast("Erro ao exportar CSV.", "error");
   }
 });
 
-document.getElementById('btn-export-pdf').addEventListener('click', async () => {
+document.getElementById("btn-export-pdf").addEventListener("click", async () => {
   try {
     const chartImage = await exportChartImage();
-    const [latest, stats, history] = await Promise.all([
-      fetchLatest(),
-      fetchStats(currentPeriod),
-      fetchHistory(currentPeriod)
-    ]);
+    const [latest, stats, history] = await Promise.all([fetchLatest(), fetchStats(currentPeriod), fetchHistory(currentPeriod)]);
 
     const payload = { chartImage, currentPeriod, latest, stats, history };
     const blob = await fetchExportPDF(payload);
 
     const url = window.URL.createObjectURL(blob);
-    const a = document.createElement('a');
+    const a = document.createElement("a");
     a.href = url;
     a.download = `relatorio-effy-${currentPeriod}.pdf`;
     document.body.appendChild(a);
     a.click();
     a.remove();
   } catch (err) {
-    console.error('Erro ao exportar PDF:', err);
-    showToast("Erro ao exportar PDF.", 'error');
+    console.error("Erro ao exportar PDF:", err);
+    showToast("Erro ao exportar PDF.", "error");
   }
 });
 
-const btnEditLocation = document.getElementById('btn-edit-location');
-const formLocation = document.getElementById('form-location');
-const inputLocation = document.getElementById('input-location');
-const btnCancelLocation = document.getElementById('btn-cancel-location');
+const btnEditLocation = document.getElementById("btn-edit-location");
+const formLocation = document.getElementById("form-location");
+const inputLocation = document.getElementById("input-location");
+const btnCancelLocation = document.getElementById("btn-cancel-location");
 
-btnEditLocation.addEventListener('click', () => {
-  formLocation.classList.remove('hidden');
-  btnEditLocation.classList.add('hidden');
-  inputLocation.value = currentLocationValue || '';
+btnEditLocation.addEventListener("click", () => {
+  formLocation.classList.remove("hidden");
+  btnEditLocation.classList.add("hidden");
+  inputLocation.value = currentLocationValue || "";
   inputLocation.focus();
 });
 
-btnCancelLocation.addEventListener('click', (e) => {
+btnCancelLocation.addEventListener("click", (e) => {
   e.preventDefault();
-  formLocation.classList.add('hidden');
-  btnEditLocation.classList.remove('hidden');
-  inputLocation.value = '';
+  formLocation.classList.add("hidden");
+  btnEditLocation.classList.remove("hidden");
+  inputLocation.value = "";
 });
 
-formLocation.addEventListener('submit', async (e) => {
+formLocation.addEventListener("submit", async (e) => {
   e.preventDefault();
   const newLocation = inputLocation.value.trim();
   if (!newLocation) {
-    showToast('Digite um local válido.', 'error');
+    showToast("Digite um local válido.", "error");
     return;
   }
 
   try {
     const data = await updateLocation(newLocation);
-    showToast(data.message || 'Local alterado com sucesso!', 'success', 4000);
+    showToast(data.message || "Local alterado com sucesso!", "success", 4000);
     updateLocationDisplay(data.location);
     currentLocationValue = data.location;
-    formLocation.classList.add('hidden');
-    btnEditLocation.classList.remove('hidden');
-    await fetchData(); // dados novos para o novo local
+    formLocation.classList.add("hidden");
+    btnEditLocation.classList.remove("hidden");
+    await fetchData();
+    startTimer();
   } catch (err) {
-    showToast(err.message || 'Erro ao alterar local.', 'error');
+    showToast(err.message || "Erro ao alterar local.", "error");
     inputLocation.focus();
   }
 });

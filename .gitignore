@@ -6,3 +6,6 @@ node_modules/
 
 #.evn
 .env
+
+# Não ignorar o .env.example
+!.env.example

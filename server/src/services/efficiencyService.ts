@@ -5,4 +5,3 @@ export function calculateEfficiency(temperature: number): number {
   const efficiency = 75 + ((temperature - 24) / (28 - 24)) * 25;
   return parseFloat(efficiency.toFixed(2));
 }
-

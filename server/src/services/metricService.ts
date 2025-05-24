@@ -1,20 +1,7 @@
 import { getWeatherFromAPI } from "./weatherService";
 import { calculateEfficiency } from "./efficiencyService";
 import { pool } from "../db/pgClient";
-import {
-  subDays,
-  subWeeks,
-  subMonths,
-  setHours,
-  setMinutes,
-  addMinutes,
-  subMinutes,
-  startOfDay,
-
-} from 'date-fns';
-
-
-
+import { subDays, subWeeks, subMonths, setHours, setMinutes, addMinutes, subMinutes, startOfDay } from "date-fns";
 
 // Função para registrar uma nova métrica
 export async function collectAndSaveMetric(location?: string) {
@@ -95,7 +82,7 @@ export const metricService = {
     };
   },
 
-    getLatest: async () => {
+  getLatest: async () => {
     const query = `
         SELECT * FROM metric
         ORDER BY "id" DESC
@@ -103,10 +90,8 @@ export const metricService = {
     `;
     const result = await pool.query(query);
     return result.rows[0];
-    }
-
+  },
 };
-
 
 export async function getComparativeMetrics(referenceDate: Date) {
   const hour = referenceDate.getHours();
@@ -143,13 +128,15 @@ export async function getComparativeMetrics(referenceDate: Date) {
   return results;
 }
 
-
 export async function getPreviousMetric(currentId: number) {
-  const result = await pool.query(`
+  const result = await pool.query(
+    `
     SELECT * FROM metric
     WHERE id <> $1
     ORDER BY "createdAt" DESC
     LIMIT 1;
-  `, [currentId]);
+  `,
+    [currentId]
+  );
   return result.rows[0];
 }
