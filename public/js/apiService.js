@@ -1,5 +1,3 @@
-// js/apiService.js
-
 export async function fetchMetrics() {
   return fetchJSON('/api/metrics/collect');
 }

@@ -1,5 +1,3 @@
-// js/utils.js
-
 export function formatDisplayValue(value, type = null) {
   if (value === null || value === undefined || value === '') return '--';
 
@@ -42,7 +40,7 @@ export function showToast(message, type = 'success', duration = 5000) {
   progressBar.offsetHeight; // força reflow
   progressBar.style.animation = `toast-progress-animation ${duration}ms linear forwards`;
 
-  // Esconde o toast após o tempo
+
   setTimeout(() => {
     toast.classList.remove('show');
   }, duration);
