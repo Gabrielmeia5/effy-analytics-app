@@ -31,6 +31,23 @@ Este projeto foi desenvolvido com foco em **exceder os requisitos do desafio té
 
 ---
 
+
+## 📐 Cálculo da Eficiência
+
+A **eficiência operacional da máquina** é definida com base na temperatura externa:
+
+- Temperatura **≥ 28°C** → **Eficiência = 100%**
+- Temperatura **≤ 24°C** → **Eficiência = 75%**
+- Temperatura entre **24°C e 28°C** → Eficiência interpolada linearmente:
+
+```ts
+// Fórmula aplicada no backend:
+efficiency = 75 + ((temperature - 24) / (28 - 24)) * 25
+```
+
+
+---
+
 ## 🚀 Funcionalidades
 
 - 🔄 **Coleta automática de dados climáticos** a cada 30 segundos.
@@ -175,27 +192,41 @@ Acesse em: [http://localhost:3000](http://localhost:3000)
 
 ---
 
-## 🚀 Melhorias Futuras
+## 🔭 Melhorias Futuras
 
-- ☁️ Deploy em nuvem*(Render, Railway, Vercel) com escalabilidade automática.
-- 🔐 Autenticação e controle de acesso com níveis de permissão (admin, analista, operador).
-- 👥 Suporte a múltiplos usuários monitorando diferentes máquinas/localizações simultaneamente.
-- 📊 Novos tipos de gráficos e filtros avançados, incluindo dashboards comparativas entre períodos e localidades.
-- 📅 Períodos personalizados: permitir seleção além de Dia, Semana e Mês (ex.: últimos 10 dias, intervalos livres).
-- 🔮 Análise preditiva na dashboard:
-  - Modelagem para previsão de eficiência futura com base em padrões climáticos e históricos.
-  - Uso de Machine Learning básico ou modelos estatísticos.
-- 🧠 Insights inteligentes e alertas proativos:
-  - Notificações automáticas sobre quedas bruscas de eficiência, tendências fora do padrão ou alterações climáticas críticas.
-- 📤 Integração com Google Sheets ou Excel Online: exportação e sincronização automática dos dados.
-- 🚀 Algoritmos de eficiência configuráveis:
-  - Possibilidade de aplicar diferentes fórmulas de cálculo e validar o modelo mais adequado para diferentes contextos operacionais.
-- 🌐 Internacionalização (i18n) com suporte a múltiplos idiomas.
-- 🎨 Migração do frontend para frameworks modernos (React) com maior escalabilidade e experiência do usuário.
+Abaixo estão propostas cuidadosamente selecionadas para evoluir a plataforma com foco em valor real, usabilidade e escalabilidade:
+
+- 🔐 **Autenticação com Níveis de Acesso**  
+  Implementar controle de permissões para diferentes perfis (admin, analista, operador), garantindo segurança e governança.
+
+- 👥 **Multiusuário e Multi-localização**  
+  Suporte simultâneo a diferentes usuários e máquinas/localizações, com visualização segmentada por contexto.
+
+- 📊 **Dashboards Comparativas e Filtros Avançados**  
+  Gráficos comparativos entre períodos e regiões, com filtros customizáveis para análises mais refinadas.
+
+- 📅 **Intervalos de Tempo Personalizados**  
+  Permitir seleção livre de datas (ex: últimos 10 dias, intervalos específicos), além das opções fixas atuais.
+
+- 🔮 **Previsão de Eficiência Baseada em Dados Climáticos e Históricos**  
+  Aplicar modelos estatísticos ou machine learning simples para antecipar variações de desempenho.
+
+- 🧠 **Alertas Inteligentes e Insights Automatizados**  
+  Notificações proativas sobre quedas bruscas de eficiência, padrões anômalos ou mudanças ambientais críticas.
+
+- 📤 **Integração com Google Sheets e Excel Online**  
+  Exportação e sincronização automática com planilhas na nuvem, facilitando relatórios externos.
+
+- 🚀 **Fórmulas de Eficiência Configuráveis**  
+  Suporte a diferentes métodos de cálculo, permitindo adaptar a análise ao contexto operacional do usuário.
+
+
+---
+
 
 ## 📝 Licença
 
-Este projeto está licenciado sob os termos da licença MIT. Consulte o arquivo [LICENSE](LICENSE) para mais informações.
+MIT © 2025 Gabriel
 
 ---
 
