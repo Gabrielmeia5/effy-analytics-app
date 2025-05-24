@@ -13,9 +13,12 @@ import {
 
 } from 'date-fns';
 
+
+
+
 // Função para registrar uma nova métrica
-export async function collectAndSaveMetric() {
-  const city = process.env.LOCATION_DEFAULT || "Patos de Minas";
+export async function collectAndSaveMetric(location?: string) {
+  const city = location || process.env.LOCATION_DEFAULT || "Patos de Minas";
   const { temperature, description } = await getWeatherFromAPI(city);
   const efficiency = calculateEfficiency(temperature);
 
@@ -28,7 +31,6 @@ export async function collectAndSaveMetric() {
 
   const result = await pool.query(insertQuery, values);
   const metric = result.rows[0];
-  
 
   return { ...metric, clima: description };
 }

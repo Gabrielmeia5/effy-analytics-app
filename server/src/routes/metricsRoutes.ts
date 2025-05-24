@@ -1,35 +1,29 @@
 import express from 'express';
+import { asyncHandler } from '../utils/asyncHandler'; // ajuste o caminho conforme sua estrutura
 import {
   collectMetric,
   getLatestMetric,
   getHistory,
   getStats,
   getComparative,
-  generateMock
+  generateMock,
+  setLocation,
+  getLocation
 } from '../controllers/metricsController';
+import { exportMetrics } from '../controllers/csvExportController';
+import { exportPDF } from '../controllers/pdfExportController';
 
 const router = express.Router();
 
-// Registrar nova métrica (quando usuário acessar)
-router.get('/collect', collectMetric);
-
-router.get('/latest', (req, res, next) => {
-  getLatestMetric(req, res).catch(next);
-});
-
-router.get('/history', (req, res, next) => {
-  getHistory(req, res).catch(next);
-});
-
-router.get('/stats', (req, res, next) => {
-  getStats(req, res).catch(next);
-});
-
-
-router.get('/comparative', (req, res, next) => {
-  getComparative(req, res).catch(next);
-});
-
-router.get('/mock', generateMock);
+router.get('/collect', asyncHandler(collectMetric));
+router.get('/latest', asyncHandler(getLatestMetric));
+router.get('/history', asyncHandler(getHistory));
+router.get('/stats', asyncHandler(getStats));
+router.get('/comparative', asyncHandler(getComparative));
+router.get('/mock', asyncHandler(generateMock));
+router.get('/export', asyncHandler(exportMetrics));
+router.post('/export/pdf', asyncHandler(exportPDF));
+router.get('/location', asyncHandler(getLocation));
+router.post('/location', asyncHandler(setLocation));
 
 export default router;

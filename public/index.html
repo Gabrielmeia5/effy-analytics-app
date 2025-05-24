@@ -9,18 +9,37 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,100..900&display=swap" rel="stylesheet">
 
+    <link rel="icon" type="image/png" href="./favicon.png">
     <link rel="stylesheet" href="./css/styles.css">
 </head>
 <body>
     
     <header>
-        <h1 class="main-title">Effy <span>Analytics</span></h1>
+        <div class="title-container">
+            <img src="./assets/logo.svg" class="logo" alt="">
+            <h1 class="main-title">Effy <span>Analytics</span></h1>
+        </div>
         <div class="header-content">
             <div class="container-localization">
                 <span data-lucide="map-pin" class="icon"></span>
                 <h2 class="value-localization">--</h2>
+                <button id="btn-edit-location" class="btn-edit-location" title="Alterar local">
+                    <span data-lucide="edit-3"></span>
+                </button>
+                <form id="form-location" class="form-location hidden">
+                    <input type="text" id="input-location" class="input-location" placeholder="Digite o local" autocomplete="off" />
+                    <button type="submit" class="btn-confirm-location" title="Confirmar">
+                        <span data-lucide="check"></span>
+                    </button>
+                    <button type="button" id="btn-cancel-location" class="btn-cancel-location" title="Cancelar">
+                        <span data-lucide="x"></span>
+                    </button>
+                </form>
             </div>
-
+            <div>
+                <button id="btn-export-csv" class="btn-export">Exportar CSV</button>
+                <button id="btn-export-pdf" class="btn-export">Exportar PDF</button>
+            </div>
             <div class="container-timer">
                 <span data-lucide="alarm-clock" class="icon"></span>
                 <p><span class="value-timer">-</span>s</p>
@@ -50,6 +69,11 @@
                 <li>
                     <a aria-label="Dashboard Home" class="nav-button active" href="#">
                         <span data-lucide="house" class="icon"></span>
+                    </a>
+                </li>
+                <li>
+                    <a aria-label="Dashboard Home" class="nav-button" href="#chart">
+                        <span data-lucide="chart-line" class="icon"></span>
                     </a>
                 </li>
             </ul>
@@ -221,11 +245,14 @@
             <p>Carregando dados...</p>
         </div>
     </div>
-    <div id="toast" class="toast hidden">Erro: algo deu errado!</div>
+    <div id="toast" class="toast hidden">
+        <span class="toast-message">Mensagem</span>
+        <div class="toast-progress"></div>
+    </div>
 
 
 
-    <script src="./js/main.js"></script>
+    <script src="./js/main.js" type="module"></script>
     <script src="https://unpkg.com/lucide@latest"></script>
     <script>
         document.addEventListener('DOMContentLoaded', () => {

@@ -3,6 +3,7 @@ import path from 'path';
 import metricsRoutes from './routes/metricsRoutes';
 
 const app = express();
+app.use(express.json({ limit: '5mb' })); // ou até 10mb se necessário
 
 // Middleware para JSON
 app.use(express.json());

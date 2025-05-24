@@ -2,9 +2,48 @@ import { Request, Response } from 'express';
 import { collectAndSaveMetric, getComparativeMetrics, getPreviousMetric, metricService } from '../services/metricService';
 import { pool } from '../db/pgClient';
 
+import { getWeatherFromAPI } from '../services/weatherService';
+
+let currentLocation: string | null = null; // Mantém o local atual em memória
+
+export async function getCurrentLocation(): Promise<string> {
+  if (currentLocation) return currentLocation;
+  // Busca o último local salvo no banco
+  const latest = await metricService.getLatest();
+  if (latest?.location) {
+    currentLocation = latest.location;
+    return currentLocation as string;
+  }
+  // Default
+  currentLocation = process.env.LOCATION_DEFAULT || 'Patos de Minas';
+  return currentLocation as string;
+}
+
+export async function setLocation(req: Request, res: Response) {
+  const { location } = req.body;
+  if (!location || typeof location !== 'string' || location.trim().length < 2) {
+    return res.status(400).json({ error: 'Localização inválida.' });
+  }
+  try {
+    // Valida se o local existe na API do clima
+    await getWeatherFromAPI(location.trim());
+    currentLocation = location.trim();
+    res.json({ message: `Local de monitoramento alterado para "${currentLocation}".`, location: currentLocation });
+  } catch (error: any) {
+    res.status(400).json({ error: error.message || 'Localização inválida.' });
+  }
+}
+
+export async function getLocation(req: Request, res: Response) {
+  const location = await getCurrentLocation();
+  res.json({ location });
+}
+
+// Modifique collectMetric para usar o local atual
 export async function collectMetric(req: Request, res: Response) {
   try {
-    const metric = await collectAndSaveMetric();
+    const location = await getCurrentLocation();
+    const metric = await collectAndSaveMetric(location);
     const previous = await getPreviousMetric(metric.id);
     const trendTemp = calculateTrend(metric.temperature, previous?.temperature);
     const trendEff = calculateTrend(metric.efficiency, previous?.efficiency);
@@ -126,3 +165,7 @@ export async function generateMock(req: Request, res: Response) {
     res.status(500).json({ error: 'Erro ao gerar mock.' });
   }
 }
+
+
+
+
