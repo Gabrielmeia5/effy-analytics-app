@@ -1,4 +1,14 @@
-
+import {
+  fetchMetrics,
+  fetchLatest,
+  fetchStats,
+  fetchComparative,
+  fetchHistory,
+  fetchExportCSV,
+  fetchExportPDF,
+  fetchLocation,
+  updateLocation
+} from "./apiService.js";
 
 
 const REFRESH_INTERVAL = 30;
@@ -7,6 +17,9 @@ let currentPeriod = "day";
 let chart;
 let lastTimestamp = null;
 let currentLocationValue = null;
+
+
+
 
 
 const timerEl = document.querySelector(".value-timer");
@@ -111,18 +124,18 @@ function initChart() {
 }
 async function updateChart() {
   try {
-    const res = await fetch(`/api/metrics/history?range=${currentPeriod}`);
-    const data = await res.json();
+    const data = await fetchHistory(currentPeriod);
 
-const tempData = data.map(item => ({
-  x: new Date(item.createdAt).getTime() - new Date().getTimezoneOffset() * 60000,
-  y: item.temperature
-}));
+    const tempData = data.map(item => ({
+      x: new Date(item.createdAt).getTime() - new Date().getTimezoneOffset() * 60000,
+      y: item.temperature
+    }));
 
-const effData = data.map(item => ({
-  x: new Date(item.createdAt).getTime() - new Date().getTimezoneOffset() * 60000,
-  y: item.efficiency
-}));
+    const effData = data.map(item => ({
+      x: new Date(item.createdAt).getTime() - new Date().getTimezoneOffset() * 60000,
+      y: item.efficiency
+    }));
+
     chart.updateSeries([
       { name: "Temperatura (°C)", data: tempData },
       { name: "Eficiência (%)", data: effData }
@@ -135,9 +148,7 @@ const effData = data.map(item => ({
 
 async function fetchData() {
   try {
-    const res = await fetch("/api/metrics/collect", { timeout: 7000 }); // Timeout manual (não funciona nativo no fetch, pode usar AbortController se quiser melhorar)
-    if (!res.ok) throw new Error('API /collect falhou');
-    const data = await res.json();
+    const data = await fetchMetrics();
     processData(data);
   } catch (error) {
     console.warn("Erro na API /collect, tentando fallback em /latest", error);
@@ -145,29 +156,25 @@ async function fetchData() {
     await fetchFallbackLatest();
   }
 }
+
 async function fetchFallbackLatest() {
   try {
-    const res = await fetch("/api/metrics/latest");
-    if (!res.ok) throw new Error('API /latest falhou');
-    const data = await res.json();
-
+    const data = await fetchLatest();
     processData({
       ...data,
       clima: '--',
       trendTemp: 'stable',
       trendEff: 'stable'
     });
-
   } catch (error) {
     console.error("Erro ao buscar dados offline (/latest):", error);
     showToast("Erro geral. Não foi possível carregar nenhum dado.", 'error');
   }
 }
-async function fetchStats() {
+
+async function fetchStatsUI() {
   try {
-    
-    const response = await fetch(`/api/metrics/stats?range=${currentPeriod}`);
-    const data = await response.json();
+    const data = await fetchStats(currentPeriod);
 
     document.querySelector(".value-temp-avg").textContent = formatDisplayValue(data.temperature.avg, 'temp');
     document.querySelector(".value-temp-min").textContent = formatDisplayValue(data.temperature.min, 'temp');
@@ -182,12 +189,11 @@ async function fetchStats() {
     console.error('Erro ao atualizar estatísticas:', error);
   }
 }
-async function fetchComparative() {
-  try {
-    const res = await fetch("/api/metrics/comparative");
-    if (!res.ok) throw new Error('Erro ao buscar dados comparativos');
 
-    const data = await res.json();
+
+async function fetchComparativeUI() {
+  try {
+    const data = await fetchComparative();
 
     const yesterdayTemp = document.querySelector('.value-yesterday-temperature');
     const yesterdayEff = document.querySelector('.value-yesterday-efficiency');
@@ -196,22 +202,17 @@ async function fetchComparative() {
     const lastMonthTemp = document.querySelector('.value-last-month-temperature');
     const lastMonthEff = document.querySelector('.value-last-month-efficiency');
     
-    // Ontem
     yesterdayTemp.textContent = formatComparative(data.comparative.yesterday?.temperature, data.reference.temperature, 'temp');
     yesterdayEff.textContent = formatComparative(data.comparative.yesterday?.efficiency, data.reference.efficiency, 'eff');
-
-    // Semana passada
     lastWeekTemp.textContent = formatComparative(data.comparative.lastWeek?.temperature, data.reference.temperature, 'temp');
     lastWeekEff.textContent = formatComparative(data.comparative.lastWeek?.efficiency, data.reference.efficiency, 'eff');
-
-    // Mês passado
     lastMonthTemp.textContent = formatComparative(data.comparative.lastMonth?.temperature, data.reference.temperature, 'temp');
     lastMonthEff.textContent = formatComparative(data.comparative.lastMonth?.efficiency, data.reference.efficiency, 'eff');
-    
   } catch (error) {
     console.error('Erro ao carregar dados comparativos:', error);
   }
 }
+
 
 function processData(data) {
   const dateObj = new Date(data.createdAt);
@@ -230,8 +231,8 @@ function processData(data) {
   trendEffIcon.classList.add(`trend-${data.trendEff}`);
 
   updateChart();
-  fetchStats();
-  fetchComparative();
+  fetchStatsUI();
+  fetchComparativeUI();
 }
 
 
@@ -239,7 +240,7 @@ radioButtons.forEach((radio) => {
   radio.addEventListener("change", (e) => {
     currentPeriod = e.target.value;
     updateChart();
-    fetchStats();
+    fetchStatsUI();
   });
 });
 
@@ -257,12 +258,9 @@ async function loadAllData() {
   await fetchData();       // Aguarda dados, updateChart(), stats, comparativo
 }
 
-document.getElementById('btn-export-csv').addEventListener('click', exportToCSV);
-async function exportToCSV() {
+document.getElementById('btn-export-csv').addEventListener('click', async () => {
   try {
-    const res = await fetch(`/api/metrics/export?range=${currentPeriod}`);
-    const blob = await res.blob();
-
+    const blob = await fetchExportCSV(currentPeriod);
     const url = window.URL.createObjectURL(blob);
     const a = document.createElement('a');
     a.href = url;
@@ -274,40 +272,21 @@ async function exportToCSV() {
     console.error("Erro ao exportar CSV:", err);
     showToast("Erro ao exportar CSV.", 'error');
   }
-}
+});
 
-document.getElementById('btn-export-pdf').addEventListener('click', exportToPDF);
-async function exportToPDF() {
+
+document.getElementById('btn-export-pdf').addEventListener('click', async () => {
   try {
     const chartImage = await chart.dataURI().then(uri => uri.imgURI);
-
-    const [latestRes, statsRes, historyRes] = await Promise.all([
-      fetch('/api/metrics/latest'),
-      fetch(`/api/metrics/stats?range=${currentPeriod}`),
-      fetch(`/api/metrics/history?range=${currentPeriod}`)
-    ]);
-
     const [latest, stats, history] = await Promise.all([
-      latestRes.json(),
-      statsRes.json(),
-      historyRes.json()
+      fetchLatest(),
+      fetchStats(currentPeriod),
+      fetchHistory(currentPeriod)
     ]);
 
-    const payload = {
-      chartImage,
-      currentPeriod,
-      latest,
-      stats,
-      history
-    };
+    const payload = { chartImage, currentPeriod, latest, stats, history };
+    const blob = await fetchExportPDF(payload);
 
-    const res = await fetch('/api/metrics/export/pdf', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(payload)
-    });
-
-    const blob = await res.blob();
     const url = window.URL.createObjectURL(blob);
     const a = document.createElement('a');
     a.href = url;
@@ -319,7 +298,8 @@ async function exportToPDF() {
     console.error('Erro ao exportar PDF:', err);
     showToast("Erro ao exportar PDF.", 'error');
   }
-}
+});
+
 
 document.addEventListener("DOMContentLoaded", async () => {
   const chartSection = document.querySelector("#chart");
@@ -352,8 +332,7 @@ document.addEventListener("DOMContentLoaded", async () => {
 
 async function fetchCurrentLocation() {
   try {
-    const res = await fetch('/api/metrics/location');
-    const data = await res.json();
+    const data = await fetchLocation();
     locationEl.textContent = data.location || '--';
     currentLocationValue = data.location || '--';
   } catch {
@@ -386,28 +365,21 @@ formLocation.addEventListener('submit', async (e) => {
     showToast('Digite um local válido.', 'error');
     return;
   }
+
   try {
-    const res = await fetch('/api/metrics/location', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ location: newLocation })
-    });
-    const data = await res.json();
-    if (res.ok) {
-      showToast(data.message || 'Local alterado com sucesso!', 'success',4000);
-      locationEl.textContent = data.location;
-      currentLocationValue = data.location;
-      formLocation.classList.add('hidden');
-      btnEditLocation.classList.remove('hidden');
-      await fetchData(); // Atualiza dados para o novo local
-    } else {
-      showToast(data.error || 'Local inválido.', 'warning');
-      inputLocation.focus();
-    }
-  } catch {
-    showToast('Erro ao alterar local.','error') ;
+    const data = await updateLocation(newLocation);
+    showToast(data.message || 'Local alterado com sucesso!', 'success', 4000);
+    locationEl.textContent = data.location;
+    currentLocationValue = data.location;
+    formLocation.classList.add('hidden');
+    btnEditLocation.classList.remove('hidden');
+    await fetchData();
+  } catch (err) {
+    showToast(err.message || 'Erro ao alterar local.', 'error');
+    inputLocation.focus();
   }
 });
+
 
 // Ao carregar a página, busca o local atual
 window.addEventListener("DOMContentLoaded", async () => {
@@ -419,8 +391,6 @@ window.addEventListener("DOMContentLoaded", async () => {
   loader.classList.add('fade-out');
   setTimeout(() => loader.remove(), 500);
 });
-
-
 
 
 
