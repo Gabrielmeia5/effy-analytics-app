@@ -9,3 +9,5 @@ node_modules/
 
 # Não ignorar o .env.example
 !.env.example
+
+
