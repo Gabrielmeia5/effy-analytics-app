@@ -9,6 +9,14 @@ import {
   fetchLocation,
   updateLocation
 } from "./apiService.js";
+import {
+  formatDisplayValue,
+  formatDateTime,
+  capitalizeWords,
+  showToast,
+  formatComparative
+} from './utils.js';
+
 
 
 const REFRESH_INTERVAL = 30;
@@ -391,64 +399,3 @@ window.addEventListener("DOMContentLoaded", async () => {
   loader.classList.add('fade-out');
   setTimeout(() => loader.remove(), 500);
 });
-
-
-
-// Utils
-function formatDisplayValue(value, type = null) {
-  if (value === null || value === undefined || value === '') return '--';
-
-  const num = Number(value);
-  if (isNaN(num)) return '--';
-
-  let formatted = Number.isInteger(num) ? `${num}` : `${num.toFixed(2)}`;
-  formatted = formatted.replace('.', ',');
-
-  if (type === 'temp') return `${formatted}°C`;
-  if (type === 'eff') return `${formatted}%`;
-  return formatted;
-}
-
-function formatDateTime(date) {
-  return {
-    date: date.toLocaleDateString("pt-BR"),
-    time: date.toLocaleTimeString("pt-BR"),
-  };
-}
-
-function capitalizeWords(str) {
-  if (!str) return '--';
-  return str
-    .split(' ')
-    .map(word => word.charAt(0).toUpperCase() + word.slice(1).toLowerCase())
-    .join(' ');
-}
-
-function showToast(message, type = 'success', duration = 5000) {
-  const toast = document.getElementById('toast');
-  const messageSpan = toast.querySelector('.toast-message');
-  const progressBar = toast.querySelector('.toast-progress');
-
-  messageSpan.textContent = message;
-  toast.className = 'toast show ' + type;
-
-  // Reinicia a animação da barra de progresso
-  progressBar.style.animation = 'none';
-  progressBar.offsetHeight; // força reflow
-  progressBar.style.animation = `toast-progress-animation ${duration}ms linear forwards`;
-
-  // Esconde o toast após o tempo
-  setTimeout(() => {
-    toast.classList.remove('show');
-  }, duration);
-}
-
-function formatComparative(value, reference, type) {
-    if (!value && !reference) return '--';
-
-  if((reference-value) > 0) {
-    return `+ ${formatDisplayValue(reference - value, type)}`
-  } else {
-    return formatDisplayValue(reference - value, type)
-  }
-}
