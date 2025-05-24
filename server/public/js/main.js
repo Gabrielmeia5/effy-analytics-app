@@ -15,6 +15,7 @@ window.addEventListener("DOMContentLoaded", async () => {
   await fetchCurrentLocation();
   await loadAllData();
   startTimer();
+  animationNavBar()
 
   const loader = document.getElementById("loader");
   loader.classList.add("fade-out");
@@ -208,3 +209,32 @@ formLocation.addEventListener("submit", async (e) => {
     inputLocation.focus();
   }
 });
+
+
+async function animationNavBar() {
+  const chartSection = document.querySelector("#chart");
+  const navButtons = document.querySelectorAll("nav .nav-button");
+  const homeButton = navButtons[0];
+  const chartButton = navButtons[1];
+
+  const observer = new IntersectionObserver(
+    (entries) => {
+      entries.forEach((entry) => {
+        if (entry.isIntersecting && entry.intersectionRatio >= 0.8) {
+          chartButton.classList.add("active");
+          homeButton.classList.remove("active");
+        } else {
+          chartButton.classList.remove("active");
+          homeButton.classList.add("active");
+        }
+      });
+    },
+    {
+      threshold: 0.8,
+    }
+  );
+
+  if (chartSection) {
+    observer.observe(chartSection);
+  }
+}
