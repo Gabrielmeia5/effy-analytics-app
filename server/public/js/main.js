@@ -131,7 +131,11 @@ document.querySelectorAll('input[name="period"]').forEach((radio) => {
   });
 });
 
+const exportCSVButton = document.getElementById("btn-export-csv");
+const exportPDFButton = document.getElementById("btn-export-pdf");
+
 document.getElementById("btn-export-csv").addEventListener("click", async () => {
+  exportCSVButton.classList.add("loading");
   try {
     const blob = await fetchExportCSV(currentPeriod);
     const url = window.URL.createObjectURL(blob);
@@ -144,10 +148,13 @@ document.getElementById("btn-export-csv").addEventListener("click", async () => 
   } catch (err) {
     console.error("Erro ao exportar CSV:", err);
     showToast("Erro ao exportar CSV.", "error");
+  } finally {
+    exportCSVButton.classList.remove("loading"); 
   }
 });
 
 document.getElementById("btn-export-pdf").addEventListener("click", async () => {
+  exportPDFButton.classList.add("loading"); 
   try {
     const chartImage = await exportChartImage();
     const [latest, stats, history] = await Promise.all([fetchLatest(), fetchStats(currentPeriod), fetchHistory(currentPeriod)]);
@@ -165,7 +172,10 @@ document.getElementById("btn-export-pdf").addEventListener("click", async () => 
   } catch (err) {
     console.error("Erro ao exportar PDF:", err);
     showToast("Erro ao exportar PDF.", "error");
+  } finally {
+    exportPDFButton.classList.remove("loading"); // Remove loading
   }
+
 });
 
 const btnEditLocation = document.getElementById("btn-edit-location");

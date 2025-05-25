@@ -675,7 +675,8 @@ main {
 @media (max-width: 768px) {
   main {
     flex-direction: column;
-    padding: 22vh var(--spacing-md);
+    padding: 30vh var(--spacing-md);
+    padding-bottom: 5vh;
   }
 
   nav ul {
@@ -854,19 +855,180 @@ main {
 }
 
 .btn-export {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
   padding: 10px 16px;
-  background-color: var(--chart-primary);
-  color: white;
-  border: none;
+  background-color: var(--secondary-bg-color);
+  border: 1px solid var(--chart-grid);
+  color: var(--secondary-text-color);
+  font-weight: 500;
+  font-size: 0.875rem;
   border-radius: var(--radius);
   cursor: pointer;
-  font-weight: 600;
-  transition: background 0.3s ease;
-}
-.btn-export:hover {
-  background-color: #2563eb;
+  transition: var(--transition);
+  position: relative;
+  overflow: hidden;
+  box-shadow: var(--subtle-shadow);
+  min-width: 120px;
+  justify-content: center;
 }
 
+.btn-export:hover {
+  background-color: var(--hover-bg-color);
+  color: var(--primary-text-color);
+  border-color: var(--secondary-text-color);
+  box-shadow: var(--subtle-shadow);
+}
+
+.btn-export:active {
+  transform: translateY(0);
+  box-shadow: var(--subtle-shadow);
+}
+
+.btn-export .icon {
+  width: 16px;
+  height: 16px;
+  stroke-width: 2;
+  transition: var(--transition);
+  flex-shrink: 0;
+}
+
+.btn-export:hover .icon {
+  transform: scale(1.1);
+  color: var(--chart-primary);
+}
+
+/* Estado de carregamento aprimorado */
+.btn-export.loading {
+  pointer-events: none;
+  color: transparent;
+  border-color: var(--chart-grid);
+  background-color: var(--hover-bg-color);
+}
+
+.btn-export.loading .icon {
+  opacity: 0;
+}
+
+.btn-export.loading::after {
+  content: "";
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: 14px;
+  height: 14px;
+  margin-left: -7px;
+  margin-top: -7px;
+  border: 2px solid var(--chart-grid);
+  border-top-color: var(--chart-primary);
+  border-radius: 50%;
+  animation: spin-minimal 0.8s linear infinite;
+}
+
+/* Animação de carregamento minimalista */
+@keyframes spin-minimal {
+  to { 
+    transform: rotate(360deg);
+  }
+}
+
+/* Variações de botões */
+.btn-export.primary {
+  background-color: var(--chart-primary);
+  color: white;
+  border-color: var(--chart-primary);
+}
+
+.btn-export.primary:hover {
+  background-color: #2563EB;
+  border-color: #2563EB;
+  box-shadow: var(--card-shadow-hover);
+}
+
+.btn-export.primary.loading::after {
+  border-color: rgba(255, 255, 255, 0.3);
+  border-top-color: white;
+}
+
+.btn-export.secondary {
+  background-color: transparent;
+  color: var(--secondary-text-color);
+  border: none;
+  box-shadow: none;
+  padding: 10px 12px;
+}
+
+.btn-export.secondary:hover {
+  background-color: var(--hover-bg-color);
+  color: var(--chart-primary);
+  transform: none;
+}
+
+/* Grupo de botões */
+.export-buttons-group {
+  display: flex;
+  gap: 0.5rem;
+  align-items: center;
+}
+
+.export-buttons-group .btn-export {
+  min-width: auto;
+}
+
+.export-buttons-group .btn-export:first-child {
+  border-top-right-radius: 0;
+  border-bottom-right-radius: 0;
+  border-right: none;
+}
+
+.export-buttons-group .btn-export:not(:first-child):not(:last-child) {
+  border-radius: 0;
+  border-right: none;
+}
+
+.export-buttons-group .btn-export:last-child {
+  border-top-left-radius: 0;
+  border-bottom-left-radius: 0;
+}
+
+/* Responsividade */
+@media (max-width: 768px) {
+  .btn-export {
+    padding: 8px 12px;
+    font-size: 0.8rem;
+    min-width: 100px;
+  }
+  
+  .btn-export .icon {
+    width: 14px;
+    height: 14px;
+  }
+  
+  .export-buttons-group {
+    gap: 0.25rem;
+  }
+}
+
+/* Estados de foco para acessibilidade */
+.btn-export:focus-visible {
+  outline: 2px solid var(--chart-primary);
+  outline-offset: 2px;
+}
+
+/* Animação de sucesso */
+.btn-export.success {
+  background-color: var(--positive-color);
+  color: white;
+  border-color: var(--positive-color);
+  animation: pulse-success 0.3s ease-out;
+}
+
+@keyframes pulse-success {
+  0% { transform: scale(1); }
+  50% { transform: scale(1.05); }
+  100% { transform: scale(1); }
+}
 /* ...existing code... */
 .btn-edit-location {
   background: none;
