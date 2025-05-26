@@ -4,6 +4,7 @@
 [![Node.js](https://img.shields.io/badge/Node.js-18.x-green?logo=node.js)](https://nodejs.org/)
 [![TypeScript](https://img.shields.io/badge/TypeScript-4.x-blue?logo=typescript)](https://www.typescriptlang.org/)
 [![PostgreSQL](https://img.shields.io/badge/PostgreSQL-16.x-blue?logo=postgresql)](https://www.postgresql.org/)
+[![Jest](https://img.shields.io/badge/Tested%20with-Jest-99424f?logo=jest)](https://jestjs.io/)
 [![License](https://img.shields.io/badge/license-MIT-lightgrey.svg)](LICENSE)
 
 > Sistema fullstack de monitoramento climático e eficiência operacional, com dashboard interativa, coleta automática de dados, análise histórica e geração de relatórios.
@@ -71,6 +72,18 @@ efficiency = 75 + ((temperature - 24) / (28 - 24)) * 25
 
 ---
 
+## 🧪 Testes
+O projeto utiliza **Jest** para testes unitários. Exemplo incluído para o cálculo de eficiência:
+
+```
+npm run test
+```
+Os testes cobrem:
+- Regras de cálculo da eficiência
+- Comportamento esperado para diferentes faixas de temperatura
+
+---
+
 ## 🧰 Tecnologias Utilizadas
 
 ### 🔙 Backend
@@ -82,6 +95,8 @@ efficiency = 75 + ((temperature - 24) / (28 - 24)) * 25
 - **Handlebars** – Templates de PDF
 - **csv-writer** – Exportação CSV
 - **date-fns** – Manipulação de datas
+- **dotenv** – Variáveis de ambiente
+- **Jest + ts-jest** – Testes
 
 ### 🔥 Frontend
 - **HTML5 + CSS3 + JavaScript (ES6)**
@@ -113,13 +128,16 @@ effy-analytics/
 │   │   ├── utils/           # Helpers
 │   │   ├── app.ts           # Configuração do servidor
 │   │   └── index.ts         # Bootstrap do servidor
-│   ├── public/             # Frontend estático
-│   │   ├── index.html
-│   │   ├── css/
-│   │   └── js/
-│   ├── .env
-│   ├── package.json
-│   ├── tsconfig.json
+├── public/                  # Frontend estático
+│   ├── index.html
+│   ├── css/
+│   └── js/
+├── tests/
+├── .env
+├── package.json
+├── tsconfig.json
+├── tsconfig.test.json
+├── jest.config.js
 ├── README.md
 ```
 
