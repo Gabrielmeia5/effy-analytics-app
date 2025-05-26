@@ -19,7 +19,7 @@ export async function getWeatherFromAPI(city: string): Promise<WeatherData> {
         units: "metric",
         lang: "pt_br",
       },
-      timeout: 5000, // ⏰ Define um tempo limite para evitar travamento
+      timeout: 5000, 
     });
 
     const temperature = response.data.main?.temp;
