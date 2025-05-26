@@ -7,7 +7,7 @@ app.use(express.json({ limit: "10mb" })); // ou até 10mb se necessário
 
 app.use(express.json());
 
-const publicPath = path.join(__dirname, "..", "public");
+const publicPath = path.resolve(process.cwd(), "public");
 app.use(express.static(publicPath));
 
 app.use("/api/metrics", metricsRoutes);
