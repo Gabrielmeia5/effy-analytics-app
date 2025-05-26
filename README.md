@@ -158,6 +158,7 @@ effy-analytics/
 | POST   | /api/metrics/export/pdf | Exporta relatório em PDF                | body: { chartImage } |
 | GET    | /api/metrics/location | Consulta localização monitorada           | -                  |
 | POST   | /api/metrics/location | Altera localização monitorada             | body: { location } |
+| POST   | /api/metrics/mock     | Gera dados simulados                      | ?days=30&interval=15 |
 
 ## ⚙️ Instalação e Execução
 
